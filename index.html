@@ -65,7 +65,8 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   display:flex;
   align-items:center;
   gap:16px;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+  justify-content:space-between;
 }
 .nav-brand{
   color:#fff;
@@ -73,19 +74,27 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   font-weight:700;
   font-size:0.98rem;
   white-space:nowrap;
+  flex-shrink:0;
 }
 .nav-links{
   display:flex;
   align-items:center;
   gap:2px;
   flex:1;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+  min-width:0;
+  overflow-x:auto;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
+.nav-links::-webkit-scrollbar{display:none;}
 .nav-group{
   display:flex;
   align-items:center;
   gap:2px;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+  flex-shrink:0;
 }
 .nav-group-label{display:none;}
 .nav-sep{
@@ -94,6 +103,7 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   min-height:18px;
   background:rgba(255,255,255,0.25);
   margin:0 8px;
+  flex-shrink:0;
 }
 .nav-links button{
   background:none;
@@ -106,6 +116,8 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   cursor:pointer;
   white-space:nowrap;
   opacity:0.85;
+  flex-shrink:0;
+  scroll-snap-align:start;
   transition:background .15s, opacity .15s;
 }
 .nav-links button:hover{background:rgba(255,255,255,0.1);color:#fff;opacity:1;}
@@ -114,6 +126,7 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   display:flex;
   align-items:center;
   gap:8px;
+  flex-shrink:0;
 }
 .navbar-progress .bar-track{width:80px;height:7px;}
 .navbar-progress span{color:var(--accent);font-size:0.75rem;font-weight:700;white-space:nowrap;}
@@ -253,6 +266,17 @@ section .section-sub{color:var(--muted);margin:-10px 0 18px;font-size:0.95rem;}
 }
 .countdown-simple .cd-days{font-family:'DM Sans',sans-serif;font-weight:800;font-size:2.6rem;line-height:1;}
 .countdown-simple .cd-label{font-size:0.82rem;color:var(--muted);max-width:200px;line-height:1.3;}
+
+.next-step-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--card-border);
+  font-size:0.9rem;
+}
+.next-step-row:last-child{border-bottom:none;}
+.next-step-text{flex:1;}
 
 .design-grid{margin-top:18px;}
 .design-item{margin-bottom:10px;}
@@ -776,6 +800,10 @@ footer.page-footer{
     transform:translateY(-8px);
     transition:opacity .2s ease, transform .2s ease;
     pointer-events:none;
+    overflow-x:visible;
+    overflow-y:auto;
+    max-height:75vh;
+    scroll-snap-type:none;
   }
   .nav-links.open{
     opacity:1;
@@ -816,9 +844,9 @@ footer.page-footer{
       <div class="nav-group">
         <span class="nav-group-label">Proyecto</span>
         <button data-target="resumen">Resumen</button>
-        <button data-target="setup">Setup Experimental</button>
+        <button data-target="setup">Setup</button>
         <button data-target="glosario">Glosario</button>
-        <button data-target="marco-teorico">Marco Teórico</button>
+        <button data-target="marco-teorico">Marco T.</button>
       </div>
       <span class="nav-sep"></span>
       <div class="nav-group">
@@ -832,11 +860,10 @@ footer.page-footer{
       <span class="nav-sep"></span>
       <div class="nav-group">
         <span class="nav-group-label">Contexto</span>
-        <button data-target="limitaciones">Limitaciones</button>
-        <button data-target="antecedentes">Antecedentes Quintero</button>
+        <button data-target="limitaciones">Límites</button>
         <button data-target="quintero">Caso Quintero</button>
         <button data-target="referencias">Referencias</button>
-        <button data-target="checklist">Checklist Día de Feria</button>
+        <button data-target="checklist">Checklist</button>
       </div>
     </nav>
     <div class="navbar-progress">
@@ -880,6 +907,10 @@ footer.page-footer{
           <div class="bar-track" style="height:14px;margin-bottom:6px;"><div class="bar-fill" id="mainProgressBar" style="height:14px;"></div></div>
           <p id="mainProgressText" style="color:var(--muted);font-size:0.88rem;">Cargando...</p>
           <p style="font-size:0.85rem;color:var(--muted);">Se calcula automáticamente según las tareas marcadas como completadas en la sección <strong>Tareas</strong>.</p>
+        </div>
+        <div class="card">
+          <h3>Próximos pasos</h3>
+          <div id="nextStepsList"></div>
         </div>
       </div>
 
@@ -1085,23 +1116,10 @@ footer.page-footer{
       </div>
     </section>
 
-    <!-- 11. ANTECEDENTES QUINTERO -->
-    <section id="antecedentes">
-      <div class="section-head"><span class="num">11</span><h2>Antecedentes en Quintero</h2></div>
-      <div class="card">
-        <ul class="clean" style="font-size:0.95rem;">
-          <li>Tras las intoxicaciones masivas de 2018, la <strong>única medida tangible</strong> fue la instalación de purificadores de aire <strong>comerciales</strong> en algunas salas de los colegios de Quintero y Puchuncaví. Fue considerada insuficiente por las comunidades escolares.</li>
-          <li>En 2025, tras una nueva seguidilla de intoxicaciones (106 afectados en septiembre, 8 alumnos en octubre), se reforzaron los purificadores existentes y los protocolos de emergencia.</li>
-          <li>En 2026, al volver a clases, las comunidades escolares reportaron que muchas salas <strong>aún no tienen purificadores</strong>, y los que sí tienen son comerciales y caros.</li>
-          <li><strong>Nadie ha probado el enfoque Corsi-Rosenthal</strong> (casero, barato) en zonas de sacrificio chilenas.</li>
-          <li>Nuestro aporte original es demostrar que se puede lograr una filtración comparable a un costo accesible para cualquier colegio, no solo los que puedan pagar equipos comerciales.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 12. CASO QUINTERO -->
+    <!-- 11. CASO QUINTERO (incluye antecedentes) -->
     <section id="quintero">
-      <div class="section-head"><span class="num">12</span><h2>Caso Quintero-Puchuncaví</h2></div>
+      <div class="section-head"><span class="num">11</span><h2>Caso Quintero-Puchuncaví</h2></div>
+      <p class="section-sub">📍 Quintero y Puchuncaví están en la <strong>Región de Valparaíso</strong>, a más de 100 km de Santiago — no son la misma zona.</p>
 
       <div class="banner">
         <h3>La zona de sacrificio en números</h3>
@@ -1124,6 +1142,17 @@ footer.page-footer{
         </div>
       </div>
 
+      <div class="card">
+        <h3>Antecedentes: purificadores en las escuelas</h3>
+        <ul class="clean" style="font-size:0.95rem;">
+          <li>Tras las intoxicaciones masivas de 2018, la <strong>única medida tangible</strong> fue la instalación de purificadores de aire <strong>comerciales</strong> en algunas salas de los colegios de Quintero y Puchuncaví. Fue considerada insuficiente por las comunidades escolares.</li>
+          <li>En 2025, tras una nueva seguidilla de intoxicaciones (106 afectados en septiembre, 8 alumnos en octubre), se reforzaron los purificadores existentes y los protocolos de emergencia.</li>
+          <li>En 2026, al volver a clases, las comunidades escolares reportaron que muchas salas <strong>aún no tienen purificadores</strong>, y los que sí tienen son comerciales y caros.</li>
+          <li><strong>Nadie ha probado el enfoque Corsi-Rosenthal</strong> (casero, barato) en zonas de sacrificio chilenas.</li>
+          <li>Nuestro aporte original es demostrar que se puede lograr una filtración comparable a un costo accesible para cualquier colegio, no solo los que puedan pagar equipos comerciales.</li>
+        </ul>
+      </div>
+
       <div class="callout warn">
         <div class="ctitle">⚠️ Dato clave</div>
         <p>Tras las intoxicaciones de 2018 y 2025, se instalaron purificadores <strong>comerciales</strong> —caros— en algunas salas de clase. Fue la única medida tangible tomada y aun así fue considerada <strong>insuficiente</strong> por las comunidades escolares. Hasta donde sabemos, <strong>nadie ha probado el enfoque Corsi-Rosenthal de bajo costo</strong> en zonas de sacrificio chilenas. Ese es nuestro aporte original.</p>
@@ -1131,8 +1160,8 @@ footer.page-footer{
 
       <div class="grid grid-2">
         <div class="card">
-          <h3>No es solo un problema industrial</h3>
-          <p>En julio de 2025, Santiago fue la <strong>3ª ciudad más contaminada del mundo</strong>, con 161 μg/m³ de PM2.5 en su peor día, muy por encima de los 15 μg/m³ que recomienda la OMS como promedio anual.</p>
+          <h3>Contexto nacional</h3>
+          <p>Y no es solo Quintero: Santiago, la capital, registró 161 μg/m³ de PM2.5 en julio de 2025, siendo la 3ª ciudad más contaminada del mundo ese día — muy por encima de los 15 μg/m³ que recomienda la OMS como promedio anual. La contaminación del aire es un problema nacional, aunque en las zonas de sacrificio es crónica y mucho más grave.</p>
         </div>
         <div class="card">
           <h3>Argumento central</h3>
@@ -1141,9 +1170,9 @@ footer.page-footer{
       </div>
     </section>
 
-    <!-- 13. REFERENCIAS -->
+    <!-- 12. REFERENCIAS -->
     <section id="referencias">
-      <div class="section-head"><span class="num">13</span><h2>Referencias</h2></div>
+      <div class="section-head"><span class="num">12</span><h2>Referencias</h2></div>
       <div class="table-wrap card">
         <table>
           <thead>
@@ -1157,9 +1186,9 @@ footer.page-footer{
       <div class="grid grid-2" id="usefulLinksGrid"></div>
     </section>
 
-    <!-- 14. CHECKLIST DIA DE FERIA -->
+    <!-- 13. CHECKLIST DIA DE FERIA -->
     <section id="checklist">
-      <div class="section-head"><span class="num">14</span><h2>Checklist día de feria</h2></div>
+      <div class="section-head"><span class="num">13</span><h2>Checklist día de feria</h2></div>
       <p class="section-sub">Todo lo que hay que llevar y revisar antes de la presentación.</p>
       <div class="task-toolbar">
         <span class="task-stats" id="checklistStats">Cargando...</span>
@@ -1818,6 +1847,31 @@ function renderTasks(){
   const total = tasks.length;
   const done = tasks.filter(t=>t.done).length;
   document.getElementById('taskStats').textContent = `${done} de ${total} tareas completadas`;
+  renderNextSteps();
+}
+function renderNextSteps(){
+  const container = document.getElementById('nextStepsList');
+  if(!container) return;
+  const pending = tasks.filter(t=>!t.done).slice(0,3);
+  if(pending.length===0){
+    container.innerHTML = '<p class="empty-state">¡Todas las tareas están completadas! 🎉</p>';
+    return;
+  }
+  container.innerHTML = '';
+  pending.forEach(t=>{
+    const row = document.createElement('div');
+    row.className = 'next-step-row';
+    const pillClass = t.assignee==='Mateo'?'mateo':t.assignee==='Skalweit'?'skalweit':'ambos';
+    const pill = document.createElement('span');
+    pill.className = 'assignee-pill ' + pillClass;
+    pill.textContent = t.assignee;
+    const text = document.createElement('span');
+    text.className = 'next-step-text';
+    text.textContent = t.text;
+    row.appendChild(pill);
+    row.appendChild(text);
+    container.appendChild(row);
+  });
 }
 document.getElementById('addTaskBtn').addEventListener('click', ()=>{
   const textEl = document.getElementById('newTaskText');
