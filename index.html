@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aire limpio para aprender — Dashboard de Proyecto</title>
+<title>Proyecto Feria Científica 2026</title>
 <meta name="description" content="Dashboard de proyecto de feria científica: purificadores de aire de bajo costo para salas de clase en zonas de sacrificio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +18,8 @@
   --green:#2A9D8F;
   --purple:#7C3AED;
   --blue:#2563EB;
+  --yellow:#E9B949;
+  --gray:#8a95a1;
   --ink:#1c2b33;
   --muted:#5c7180;
   --bg:#f4f8fb;
@@ -42,57 +44,69 @@ h1,h2,h3,h4{
 a{color:var(--primary);}
 button, select, input, textarea{font-family:inherit;}
 
-/* Layout */
-.app{display:flex;min-height:100vh;}
-
-.sidebar{
-  width:270px;
-  flex-shrink:0;
-  background:linear-gradient(180deg,var(--primary),var(--primary-dark));
-  color:var(--accent);
+/* Navbar */
+.navbar{
   position:sticky;
   top:0;
-  height:100vh;
-  overflow-y:auto;
-  padding:22px 16px 20px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-  z-index:50;
+  z-index:60;
+  background:var(--primary);
+  box-shadow:var(--shadow);
 }
-.brand{
+.navbar-inner{
+  position:relative;
+  max-width:1180px;
+  margin:0 auto;
+  padding:12px 20px;
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:0 6px;
+  gap:18px;
+  flex-wrap:wrap;
 }
-.brand .dot{
-  width:14px;height:14px;border-radius:50%;
-  background:var(--coral);
-  box-shadow:0 0 0 4px rgba(231,111,81,0.25);
-  flex-shrink:0;
-}
-.brand h1{
+.nav-brand{
   color:#fff;
-  font-size:1.02rem;
-  line-height:1.25;
-  margin:0;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:0.98rem;
+  white-space:nowrap;
 }
-.sidebar-progress{
-  background:rgba(255,255,255,0.08);
-  border-radius:10px;
-  padding:12px 14px;
-}
-.sidebar-progress .label{
-  font-size:0.72rem;
-  text-transform:uppercase;
-  letter-spacing:0.05em;
-  color:var(--accent);
-  opacity:0.85;
-  margin-bottom:6px;
+.nav-links{
   display:flex;
-  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:2px;
+  flex:1;
 }
+.nav-links button{
+  background:none;
+  border:none;
+  color:var(--accent);
+  font-size:0.82rem;
+  font-weight:500;
+  padding:7px 10px;
+  border-radius:7px;
+  cursor:pointer;
+  white-space:nowrap;
+  opacity:0.85;
+  transition:background .15s, opacity .15s;
+}
+.nav-links button:hover{background:rgba(255,255,255,0.1);color:#fff;opacity:1;}
+.nav-links button.active{background:rgba(255,255,255,0.18);color:#fff;font-weight:700;opacity:1;}
+.navbar-progress{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.navbar-progress .bar-track{width:80px;height:7px;}
+.navbar-progress span{color:var(--accent);font-size:0.75rem;font-weight:700;white-space:nowrap;}
+.hamburger{
+  display:none;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:1.4rem;
+  cursor:pointer;
+  padding:2px 8px;
+}
+
 .bar-track{
   width:100%;
   height:9px;
@@ -107,66 +121,16 @@ button, select, input, textarea{font-family:inherit;}
   transition:width .4s ease;
   width:0%;
 }
-nav.navlist{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  flex:1;
-  overflow-y:auto;
-}
-nav.navlist button{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:none;
-  border:none;
-  color:var(--accent);
-  text-align:left;
-  padding:9px 10px;
-  border-radius:9px;
-  cursor:pointer;
-  font-size:0.87rem;
-  font-weight:500;
-  opacity:0.85;
-  transition:background .15s, opacity .15s;
-}
-nav.navlist button .ico{font-size:1rem;width:20px;text-align:center;}
-nav.navlist button:hover{background:rgba(255,255,255,0.08);opacity:1;}
-nav.navlist button.active{background:rgba(255,255,255,0.16);opacity:1;color:#fff;font-weight:700;}
-.sidebar-footer{
-  font-size:0.72rem;
-  color:var(--accent);
-  opacity:0.65;
-  padding:0 6px;
-}
-
-.hamburger{
-  display:none;
-  position:fixed;
-  top:14px;
-  left:14px;
-  z-index:100;
-  background:var(--primary);
-  color:#fff;
-  border:none;
-  width:42px;
-  height:42px;
-  border-radius:10px;
-  font-size:1.3rem;
-  cursor:pointer;
-  box-shadow:var(--shadow);
-}
 
 main{
-  flex:1;
-  min-width:0;
-  padding:32px clamp(16px,4vw,48px) 80px;
   max-width:1180px;
+  margin:0 auto;
+  padding:32px clamp(16px,4vw,48px) 80px;
 }
 
 section{
   margin-bottom:56px;
-  scroll-margin-top:20px;
+  scroll-margin-top:78px;
 }
 section .section-head{
   display:flex;
@@ -240,21 +204,18 @@ section .section-sub{color:var(--muted);margin:-10px 0 18px;font-size:0.95rem;}
 .stat-box .num{font-family:'DM Sans',sans-serif;font-size:1.9rem;font-weight:800;line-height:1;}
 .stat-box .lbl{font-size:0.78rem;color:var(--accent);margin-top:4px;}
 
-.countdown{
+.countdown-simple{
   display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.countdown .box{
+  align-items:center;
+  gap:16px;
   background:#fff;
   color:var(--primary);
-  border-radius:10px;
-  padding:10px 16px;
-  text-align:center;
-  min-width:68px;
+  border-radius:14px;
+  padding:14px 22px;
+  width:fit-content;
 }
-.countdown .box .n{font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.5rem;}
-.countdown .box .u{font-size:0.68rem;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;}
+.countdown-simple .cd-days{font-family:'DM Sans',sans-serif;font-weight:800;font-size:2.6rem;line-height:1;}
+.countdown-simple .cd-label{font-size:0.82rem;color:var(--muted);max-width:200px;line-height:1.3;}
 
 .design-grid{margin-top:18px;}
 .design-item{margin-bottom:10px;}
@@ -359,12 +320,25 @@ th{
 
 select.status-select, select.assignee-select, select.pagador-select, select.estado-select{
   border-radius:8px;
-  border:1px solid var(--card-border);
-  padding:6px 8px;
+  border:1.5px solid var(--card-border);
+  padding:6px 9px;
   font-size:0.82rem;
+  font-weight:600;
   cursor:pointer;
   background:#fff;
+  color:var(--ink);
 }
+/* Estados de materiales */
+select.status-select.st-por-comprar{background:#fdeae4;color:#b3452b;border-color:#f3c3ab;}
+select.status-select.st-comprado-y-en-camino{background:#fff3cd;color:#8a6300;border-color:#f0dca0;}
+select.status-select.st-listo{background:#d7f2ec;color:#146b5c;border-color:#a9dcd3;}
+select.status-select.st-descartado{background:#e9ecef;color:#5c6570;border-color:#d3d7db;}
+/* Pagador presupuesto */
+select.pagador-select.pg-mateo{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe;}
+select.pagador-select.pg-skalweit{background:#ede9fe;color:#6d28d9;border-color:#ddd6fe;}
+select.pagador-select.pg-ambos{background:#d7f2ec;color:#146b5c;border-color:#a9dcd3;}
+select.pagador-select.pg-colegio{background:#e9ecef;color:#495057;border-color:#d3d7db;}
+
 .badge{
   display:inline-block;
   padding:3px 10px;
@@ -372,24 +346,18 @@ select.status-select, select.assignee-select, select.pagador-select, select.esta
   font-size:0.75rem;
   font-weight:600;
 }
-.badge.status-por-comprar{background:#fde2e2;color:#b3261e;}
-.badge.status-verificar{background:#fff3cd;color:#8a6300;}
-.badge.status-comprado{background:#d9ecff;color:#1B4965;}
 .badge.status-listo{background:#d7f2ec;color:#146b5c;}
 
-/* Stores */
-.store-card{
+/* Links (referencias) */
+.link-card{
   display:flex;
   flex-direction:column;
   gap:8px;
 }
-.store-card .name{font-family:'DM Sans',sans-serif;font-weight:700;color:var(--primary);}
-.store-card a.btn-link{
-  align-self:flex-start;
-  margin-top:4px;
-}
+.link-card .name{font-family:'DM Sans',sans-serif;font-weight:700;color:var(--primary);}
 .btn-link{
   display:inline-block;
+  align-self:flex-start;
   background:var(--primary);
   color:#fff !important;
   text-decoration:none;
@@ -397,15 +365,16 @@ select.status-select, select.assignee-select, select.pagador-select, select.esta
   border-radius:8px;
   font-size:0.82rem;
   font-weight:600;
+  margin-top:4px;
 }
 .btn-link:hover{background:var(--primary-dark);}
-.note{font-size:0.8rem;color:var(--coral);font-weight:600;}
 
 /* Cronograma */
 .week-card{
   border-left:5px solid var(--primary);
+  margin-bottom:14px;
 }
-.week-card.receso{
+.week-card.holiday{
   border-left-color:var(--coral);
   background:#fff8f5;
 }
@@ -413,20 +382,74 @@ select.status-select, select.assignee-select, select.pagador-select, select.esta
   border-left-color:var(--green);
   background:#f3fbf9;
 }
-.week-card .wk-title{
-  font-family:'DM Sans',sans-serif;
-  font-weight:700;
-  color:var(--primary);
+.stage-card-head{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-start;
+  gap:10px;
   flex-wrap:wrap;
-  gap:6px;
 }
-.week-card.receso .wk-title{color:var(--coral);}
-.week-card.milestone .wk-title{color:var(--green);}
-.week-card .wk-dates{font-size:0.78rem;color:var(--muted);font-weight:500;}
-.week-card ul{margin:10px 0 0;padding-left:20px;font-size:0.9rem;}
+.stage-title-input{
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:1.05rem;
+  color:var(--primary);
+  border:1px solid transparent;
+  background:transparent;
+  padding:4px 6px;
+  border-radius:7px;
+  flex:1;
+  min-width:160px;
+}
+.stage-title-input:hover, .stage-title-input:focus{background:#f7fbfd;border-color:var(--card-border);outline:none;}
+.stage-dates-input{
+  font-size:0.8rem;
+  color:var(--muted);
+  border:1px solid transparent;
+  background:transparent;
+  padding:4px 6px;
+  border-radius:7px;
+  width:100%;
+  margin-top:2px;
+}
+.stage-dates-input:hover, .stage-dates-input:focus{background:#f7fbfd;border-color:var(--card-border);outline:none;}
+.flag-btn{
+  background:#fff;
+  border:1px solid var(--card-border);
+  border-radius:999px;
+  padding:4px 11px;
+  font-size:0.72rem;
+  font-weight:700;
+  color:var(--muted);
+  cursor:pointer;
+  white-space:nowrap;
+}
+.flag-btn.holiday-btn.active{background:var(--coral);color:#fff;border-color:var(--coral);}
+.flag-btn.milestone-btn.active{background:var(--green);color:#fff;border-color:var(--green);}
+.stage-items{margin-top:10px;}
+.stage-item-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-bottom:6px;
+}
+.stage-item-row input.item-date{
+  width:110px;
+  flex:none;
+  padding:7px 9px;
+  border:1px solid var(--card-border);
+  border-radius:7px;
+  font-size:0.82rem;
+}
+.stage-item-row input.item-text{
+  flex:1;
+  padding:7px 10px;
+  border:1px solid var(--card-border);
+  border-radius:7px;
+  font-size:0.88rem;
+}
+.stage-add-item-btn{margin-top:6px;}
+
 .tag-deadline{
   background:var(--coral);
   color:#fff;
@@ -578,25 +601,6 @@ select.status-select, select.assignee-select, select.pagador-select, select.esta
 .log-entry p{margin:0;font-size:0.92rem;white-space:pre-wrap;}
 .empty-state{color:var(--muted);font-size:0.9rem;font-style:italic;padding:12px 0;}
 
-/* Contactos */
-.contact-card label{
-  display:block;
-  font-size:0.72rem;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  color:var(--muted);
-  margin:10px 0 4px;
-}
-.contact-card label:first-child{margin-top:0;}
-.contact-card input[type=text]{
-  width:100%;
-  padding:8px 10px;
-  border:1px solid var(--card-border);
-  border-radius:8px;
-  font-size:0.9rem;
-}
-.contact-card h4{margin-bottom:4px;color:var(--primary);}
-
 /* Setup experimental */
 .setup-card h4{
   color:var(--primary);
@@ -646,65 +650,55 @@ footer.page-footer{
 }
 
 @media (max-width: 860px){
-  .sidebar{
-    position:fixed;
-    left:-290px;
-    top:0;
-    transition:left .25s ease;
-    box-shadow:2px 0 20px rgba(0,0,0,0.25);
-  }
-  .sidebar.open{left:0;}
-  .hamburger{display:block;}
-  main{padding-top:70px;}
-  .overlay{
+  .nav-links{
     display:none;
-    position:fixed;inset:0;
-    background:rgba(0,0,0,0.35);
-    z-index:40;
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    flex-direction:column;
+    background:var(--primary-dark);
+    padding:8px;
+    border-radius:0 0 12px 12px;
+    box-shadow:var(--shadow);
+    gap:2px;
   }
-  .overlay.show{display:block;}
+  .nav-links.open{display:flex;}
+  .nav-links button{width:100%;text-align:left;padding:10px 12px;}
+  .navbar-progress{display:none;}
+  .hamburger{display:block;}
 }
 </style>
 </head>
 <body>
 
-<button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú">☰</button>
-<div class="overlay" id="overlay"></div>
-
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="dot"></div>
-      <h1>Aire limpio para aprender</h1>
-    </div>
-
-    <div class="sidebar-progress">
-      <div class="label"><span>Progreso general</span><span id="sidebarProgressPct">0%</span></div>
-      <div class="bar-track"><div class="bar-fill" id="sidebarProgressBar"></div></div>
-    </div>
-
-    <nav class="navlist" id="navlist">
-      <button data-target="resumen"><span class="ico">📊</span>Resumen del proyecto</button>
-      <button data-target="glosario"><span class="ico">📖</span>Glosario</button>
-      <button data-target="marco-teorico"><span class="ico">🔬</span>Marco teórico</button>
-      <button data-target="quintero"><span class="ico">🏭</span>Caso Quintero-Puchuncaví</button>
-      <button data-target="limitaciones"><span class="ico">⚖️</span>Limitaciones y honestidad</button>
-      <button data-target="materiales"><span class="ico">🧰</span>Materiales y logística</button>
-      <button data-target="donde-comprar"><span class="ico">🛒</span>Dónde comprar</button>
-      <button data-target="cronograma"><span class="ico">🗓️</span>Cronograma</button>
-      <button data-target="tareas"><span class="ico">✅</span>Tareas</button>
-      <button data-target="bitacora"><span class="ico">📝</span>Bitácora</button>
-      <button data-target="contactos"><span class="ico">👥</span>Contactos</button>
-      <button data-target="referencias"><span class="ico">📚</span>Referencias</button>
-      <button data-target="setup"><span class="ico">🧪</span>Setup experimental</button>
-      <button data-target="antecedentes"><span class="ico">🏫</span>Antecedentes en Quintero</button>
-      <button data-target="presupuesto"><span class="ico">💰</span>Presupuesto</button>
+<header class="navbar">
+  <div class="navbar-inner">
+    <span class="nav-brand">Proyecto Feria Científica 2026</span>
+    <nav class="nav-links" id="navLinks">
+      <button data-target="resumen">Resumen</button>
+      <button data-target="setup">Setup experimental</button>
+      <button data-target="glosario">Glosario</button>
+      <button data-target="marco-teorico">Marco teórico</button>
+      <button data-target="quintero">Caso Quintero</button>
+      <button data-target="antecedentes">Antecedentes Quintero</button>
+      <button data-target="limitaciones">Limitaciones</button>
+      <button data-target="materiales">Materiales</button>
+      <button data-target="presupuesto">Presupuesto</button>
+      <button data-target="cronograma">Cronograma</button>
+      <button data-target="tareas">Tareas</button>
+      <button data-target="bitacora">Bitácora</button>
+      <button data-target="referencias">Referencias</button>
     </nav>
+    <div class="navbar-progress">
+      <div class="bar-track"><div class="bar-fill" id="navProgressBar"></div></div>
+      <span id="navProgressPct">0%</span>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú">☰</button>
+  </div>
+</header>
 
-    <div class="sidebar-footer">Feria Científica 2026 · Mateo Berger &amp; Skalweit</div>
-  </aside>
-
-  <main>
+<main>
 
     <!-- 1. RESUMEN -->
     <section id="resumen">
@@ -715,22 +709,20 @@ footer.page-footer{
         <div class="tagline">Purificadores de bajo costo para salas de clase en zonas de sacrificio</div>
         <div class="meta-row">
           <span class="meta-chip">🧪 Área: Física y Química</span>
-          <span class="meta-chip">👥 Mateo Berger &amp; Skalweit</span>
+          <span class="meta-chip">👥 Mateo Berger &amp; Clemente Skalweit</span>
           <span class="meta-chip">🎓 4to Medio</span>
           <span class="meta-chip">📅 Presentación: 9 de octubre de 2026</span>
         </div>
-        <div class="countdown" id="countdownBox">
-          <div class="box"><div class="n" id="cdDays">--</div><div class="u">días</div></div>
-          <div class="box"><div class="n" id="cdHours">--</div><div class="u">horas</div></div>
-          <div class="box"><div class="n" id="cdMins">--</div><div class="u">min</div></div>
-          <div class="box"><div class="n" id="cdSecs">--</div><div class="u">seg</div></div>
+        <div class="countdown-simple">
+          <div class="cd-days" id="cdDays">--</div>
+          <div class="cd-label">días restantes para la presentación</div>
         </div>
       </div>
 
       <div class="grid grid-2" style="margin-bottom:16px;">
         <div class="card">
           <h3>Objetivo</h3>
-          <p>Ganar la feria científica del colegio y luego avanzar y ganar la instancia intercolegial.</p>
+          <p>Desarrollar una propuesta científica de purificación de aire de bajo costo que pueda implementarse en salas de clase de zonas de sacrificio en Chile, contribuyendo a mejorar las condiciones de aprendizaje de estudiantes expuestos a contaminación industrial.</p>
           <h3 style="margin-top:16px;">Descripción</h3>
           <p>Construimos varios purificadores de aire tipo <strong>Corsi-Rosenthal</strong> usando distintos materiales filtrantes, medimos la reducción de PM2.5 con un sensor <strong>PMS5003</strong> conectado a <strong>Arduino</strong>, y calculamos cuál material ofrece la mejor relación costo-eficiencia. El proyecto se enmarca en el problema de las <strong>zonas de sacrificio</strong> de Chile, en particular Quintero-Puchuncaví, donde niños han sido intoxicados dentro de sus propias escuelas. Nuestra tesis: si mejoramos el aire en las salas, mejoramos la educación; si mejoramos la educación, mejoramos el futuro de Chile.</p>
         </div>
@@ -775,183 +767,9 @@ footer.page-footer{
       </div>
     </section>
 
-    <!-- 2. GLOSARIO -->
-    <section id="glosario">
-      <div class="section-head"><span class="num">02</span><h2>Glosario</h2></div>
-      <p class="section-sub">Términos clave explicados de forma simple.</p>
-      <div class="grid grid-2" id="glosarioGrid"></div>
-    </section>
-
-    <!-- 3. MARCO TEORICO -->
-    <section id="marco-teorico">
-      <div class="section-head"><span class="num">03</span><h2>Marco teórico</h2></div>
-      <p class="section-sub">Evidencia científica que respalda el proyecto, organizada por tema.</p>
-
-      <div class="paper-group">
-        <h3>🎓 Aire y rendimiento escolar</h3>
-        <div class="grid grid-2" id="papersEdu"></div>
-      </div>
-
-      <div class="paper-group">
-        <h3>📦 Corsi-Rosenthal Box</h3>
-        <div class="grid grid-2" id="papersCR"></div>
-      </div>
-    </section>
-
-    <!-- 4. CASO QUINTERO -->
-    <section id="quintero">
-      <div class="section-head"><span class="num">04</span><h2>Caso Quintero-Puchuncaví</h2></div>
-
-      <div class="banner">
-        <h3>La zona de sacrificio en números</h3>
-        <div class="hero-stats">
-          <div class="stat-box"><div class="num">~50.000</div><div class="lbl">personas afectadas</div></div>
-          <div class="stat-box"><div class="num">10+</div><div class="lbl">intoxicaciones masivas registradas</div></div>
-          <div class="stat-box"><div class="num">15+</div><div class="lbl">empresas industriales en la zona</div></div>
-          <div class="stat-box"><div class="num">20+</div><div class="lbl">años de contaminación</div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Línea de tiempo</h3>
-        <div class="timeline">
-          <div class="tl-item"><div class="tl-date">2011 — La Greda</div><p>Episodio de contaminación aguda que evidenció por primera vez a nivel nacional la gravedad de la situación en el sector La Greda, Puchuncaví.</p></div>
-          <div class="tl-item highlight"><div class="tl-date">2018 — Intoxicaciones masivas</div><p>Cientos de estudiantes y vecinos son hospitalizados por intoxicación en Quintero y Puchuncaví. Se instalan purificadores comerciales en algunas salas como única medida tangible.</p></div>
-          <div class="tl-item highlight"><div class="tl-date">Septiembre 2025 — 106 afectados</div><p>Nueva seguidilla de intoxicaciones masivas afecta a 106 personas en la zona.</p></div>
-          <div class="tl-item highlight"><div class="tl-date">Octubre 2025 — La Chocota</div><p>Nuevo episodio de contaminación reportado en el sector La Chocota, con estudiantes entre los afectados.</p></div>
-          <div class="tl-item"><div class="tl-date">2026 — Nuestro proyecto</div><p>Diseñamos y probamos purificadores caseros de bajo costo como alternativa accesible para salas de clase de la zona.</p></div>
-        </div>
-      </div>
-
-      <div class="callout warn">
-        <div class="ctitle">⚠️ Dato clave</div>
-        <p>Tras las intoxicaciones de 2018 y 2025, se instalaron purificadores <strong>comerciales</strong> —caros— en algunas salas de clase. Fue la única medida tangible tomada y aun así fue considerada <strong>insuficiente</strong> por las comunidades escolares. Hasta donde sabemos, <strong>nadie ha probado el enfoque Corsi-Rosenthal de bajo costo</strong> en zonas de sacrificio chilenas. Ese es nuestro aporte original.</p>
-      </div>
-
-      <div class="grid grid-2">
-        <div class="card">
-          <h3>No es solo un problema industrial</h3>
-          <p>En julio de 2025, Santiago fue la <strong>3ª ciudad más contaminada del mundo</strong>, con 161 μg/m³ de PM2.5 en su peor día, muy por encima de los 15 μg/m³ que recomienda la OMS como promedio anual.</p>
-        </div>
-        <div class="card">
-          <h3>Argumento central</h3>
-          <p>Los papers demuestran que filtros baratos mejoran las notas tanto como reducir el tamaño del curso en un tercio. En Quintero, los niños se intoxican dentro de sus propias escuelas. Nosotros demostramos que un filtro casero puede lograr resultados comparables a una fracción del costo de un purificador comercial.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. LIMITACIONES -->
-    <section id="limitaciones">
-      <div class="section-head"><span class="num">05</span><h2>Limitaciones y honestidad científica</h2></div>
-      <p class="section-sub">Ser honestos sobre lo que nuestro proyecto puede y no puede resolver.</p>
-
-      <div class="callout honest">
-        <div class="ctitle">🔍 Lo que reconocemos abiertamente</div>
-        <ul class="clean">
-          <li>El Corsi-Rosenthal Box con filtro MERV-13 filtra muy bien las <strong>partículas</strong> (PM2.5), pero <strong>no remueve gases</strong> como el SO2, que es parte de la contaminación de Quintero.</li>
-          <li>Agregar una capa de <strong>carbón activado</strong> podría mitigar parcialmente los VOCs, pero no es una solución total para gases.</li>
-          <li>Nuestro proyecto mide específicamente <strong>PM2.5</strong>, que sí es uno de los contaminantes principales y medibles con el equipo disponible. No pretendemos resolver toda la contaminación de la zona, sino demostrar que la parte de partículas se puede atacar de forma barata y accesible.</li>
-          <li>Creemos que esto nos hace ver honestos y rigurosos ante el jurado, lo cual es mejor que pretender que solucionamos todo el problema.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 6. MATERIALES -->
-    <section id="materiales">
-      <div class="section-head"><span class="num">06</span><h2>Materiales y logística</h2></div>
-      <p class="section-sub">Haz click en el estado de cada material para actualizarlo. Se guarda automáticamente.</p>
-
-      <div class="banner" style="padding:16px 22px;">
-        <strong>Presupuesto estimado total: $40.000 – $80.000 CLP</strong>
-      </div>
-
-      <div id="materialesGroups"></div>
-    </section>
-
-    <!-- 7. DONDE COMPRAR -->
-    <section id="donde-comprar">
-      <div class="section-head"><span class="num">07</span><h2>Dónde comprar</h2></div>
-      <p class="section-sub">Tiendas chilenas y alternativas online para conseguir los materiales.</p>
-      <div class="grid grid-3" id="storesGrid"></div>
-    </section>
-
-    <!-- 8. CRONOGRAMA -->
-    <section id="cronograma">
-      <div class="section-head"><span class="num">08</span><h2>Cronograma</h2></div>
-      <p class="section-sub">Desde hoy (22 de agosto) hasta la presentación (9 de octubre de 2026). Incluye el receso de Fiestas Patrias.</p>
-      <div id="cronogramaList"></div>
-    </section>
-
-    <!-- 9. TAREAS -->
-    <section id="tareas">
-      <div class="section-head"><span class="num">09</span><h2>Tareas</h2></div>
-      <div class="task-toolbar">
-        <span class="task-stats" id="taskStats">Cargando...</span>
-      </div>
-
-      <div class="add-task-form">
-        <input type="text" id="newTaskText" placeholder="Nueva tarea...">
-        <select id="newTaskPhase">
-          <option value="Fase 1 — Preparación">Fase 1 — Preparación</option>
-          <option value="Fase 2 — Construcción">Fase 2 — Construcción</option>
-          <option value="Fase 3 — Mediciones">Fase 3 — Mediciones</option>
-          <option value="Fase 4 — Análisis y presentación">Fase 4 — Análisis y presentación</option>
-        </select>
-        <select id="newTaskAssignee">
-          <option value="Mateo">Mateo</option>
-          <option value="Skalweit">Skalweit</option>
-          <option value="Ambos">Ambos</option>
-        </select>
-        <button class="btn" id="addTaskBtn">+ Agregar tarea</button>
-      </div>
-
-      <div id="tasksContainer"></div>
-    </section>
-
-    <!-- 10. BITACORA -->
-    <section id="bitacora">
-      <div class="section-head"><span class="num">10</span><h2>Bitácora / Log</h2></div>
-      <p class="section-sub">Registro de avances día a día.</p>
-
-      <div class="log-form">
-        <input type="date" id="logDate">
-        <select id="logAuthor">
-          <option value="Mateo">Mateo</option>
-          <option value="Skalweit">Skalweit</option>
-        </select>
-        <textarea id="logText" placeholder="¿Qué se hizo hoy?"></textarea>
-        <button class="btn" id="addLogBtn">+ Agregar entrada</button>
-      </div>
-
-      <div id="logContainer"></div>
-    </section>
-
-    <!-- 11. CONTACTOS -->
-    <section id="contactos">
-      <div class="section-head"><span class="num">11</span><h2>Contactos</h2></div>
-      <p class="section-sub">Datos de contacto de referentes del colegio. Editable — se guarda automáticamente.</p>
-      <div class="grid grid-2" id="contactsGrid"></div>
-    </section>
-
-    <!-- 12. REFERENCIAS -->
-    <section id="referencias">
-      <div class="section-head"><span class="num">12</span><h2>Referencias</h2></div>
-      <div class="table-wrap card">
-        <table>
-          <thead>
-            <tr><th>Autor / Año</th><th>Hallazgo clave</th><th>Fuente / Journal</th><th>Link</th></tr>
-          </thead>
-          <tbody id="referenciasBody"></tbody>
-        </table>
-      </div>
-
-      <h3 style="margin-top:26px;">Links útiles</h3>
-      <div class="grid grid-2" id="usefulLinksGrid"></div>
-    </section>
-
-    <!-- 13. SETUP EXPERIMENTAL -->
+    <!-- 2. SETUP EXPERIMENTAL -->
     <section id="setup">
-      <div class="section-head"><span class="num">13</span><h2>Setup experimental</h2></div>
+      <div class="section-head"><span class="num">02</span><h2>Setup experimental</h2></div>
       <p class="section-sub">Cómo se hace el experimento, paso a paso.</p>
 
       <div class="grid grid-2">
@@ -992,9 +810,74 @@ footer.page-footer{
       </div>
     </section>
 
-    <!-- 14. ANTECEDENTES QUINTERO -->
+    <!-- 3. GLOSARIO -->
+    <section id="glosario">
+      <div class="section-head"><span class="num">03</span><h2>Glosario</h2></div>
+      <p class="section-sub">Términos clave explicados de forma simple.</p>
+      <div class="grid grid-2" id="glosarioGrid"></div>
+    </section>
+
+    <!-- 4. MARCO TEORICO -->
+    <section id="marco-teorico">
+      <div class="section-head"><span class="num">04</span><h2>Marco teórico</h2></div>
+      <p class="section-sub">Evidencia científica que respalda el proyecto, organizada por tema.</p>
+
+      <div class="paper-group">
+        <h3>🎓 Aire y rendimiento escolar</h3>
+        <div class="grid grid-2" id="papersEdu"></div>
+      </div>
+
+      <div class="paper-group">
+        <h3>📦 Corsi-Rosenthal Box</h3>
+        <div class="grid grid-2" id="papersCR"></div>
+      </div>
+    </section>
+
+    <!-- 5. CASO QUINTERO -->
+    <section id="quintero">
+      <div class="section-head"><span class="num">05</span><h2>Caso Quintero-Puchuncaví</h2></div>
+
+      <div class="banner">
+        <h3>La zona de sacrificio en números</h3>
+        <div class="hero-stats">
+          <div class="stat-box"><div class="num">~50.000</div><div class="lbl">personas afectadas</div></div>
+          <div class="stat-box"><div class="num">10+</div><div class="lbl">intoxicaciones masivas registradas</div></div>
+          <div class="stat-box"><div class="num">15+</div><div class="lbl">empresas industriales en la zona</div></div>
+          <div class="stat-box"><div class="num">20+</div><div class="lbl">años de contaminación</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Línea de tiempo</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">2011 — La Greda</div><p>Episodio de contaminación aguda que evidenció por primera vez a nivel nacional la gravedad de la situación en el sector La Greda, Puchuncaví.</p></div>
+          <div class="tl-item highlight"><div class="tl-date">2018 — Intoxicaciones masivas</div><p>Cientos de estudiantes y vecinos son hospitalizados por intoxicación en Quintero y Puchuncaví. Se instalan purificadores comerciales en algunas salas como única medida tangible.</p></div>
+          <div class="tl-item highlight"><div class="tl-date">Septiembre 2025 — 106 afectados</div><p>Nueva seguidilla de intoxicaciones masivas afecta a 106 personas en la zona.</p></div>
+          <div class="tl-item highlight"><div class="tl-date">Octubre 2025 — La Chocota</div><p>Nuevo episodio de contaminación reportado en el sector La Chocota, con estudiantes entre los afectados.</p></div>
+          <div class="tl-item"><div class="tl-date">2026 — Nuestro proyecto</div><p>Diseñamos y probamos purificadores caseros de bajo costo como alternativa accesible para salas de clase de la zona.</p></div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="ctitle">⚠️ Dato clave</div>
+        <p>Tras las intoxicaciones de 2018 y 2025, se instalaron purificadores <strong>comerciales</strong> —caros— en algunas salas de clase. Fue la única medida tangible tomada y aun así fue considerada <strong>insuficiente</strong> por las comunidades escolares. Hasta donde sabemos, <strong>nadie ha probado el enfoque Corsi-Rosenthal de bajo costo</strong> en zonas de sacrificio chilenas. Ese es nuestro aporte original.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>No es solo un problema industrial</h3>
+          <p>En julio de 2025, Santiago fue la <strong>3ª ciudad más contaminada del mundo</strong>, con 161 μg/m³ de PM2.5 en su peor día, muy por encima de los 15 μg/m³ que recomienda la OMS como promedio anual.</p>
+        </div>
+        <div class="card">
+          <h3>Argumento central</h3>
+          <p>Los papers demuestran que filtros baratos mejoran las notas tanto como reducir el tamaño del curso en un tercio. En Quintero, los niños se intoxican dentro de sus propias escuelas. Nosotros demostramos que un filtro casero puede lograr resultados comparables a una fracción del costo de un purificador comercial.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ANTECEDENTES QUINTERO -->
     <section id="antecedentes">
-      <div class="section-head"><span class="num">14</span><h2>Antecedentes en Quintero</h2></div>
+      <div class="section-head"><span class="num">06</span><h2>Antecedentes en Quintero</h2></div>
       <div class="card">
         <ul class="clean" style="font-size:0.95rem;">
           <li>Tras las intoxicaciones masivas de 2018, la <strong>única medida tangible</strong> fue la instalación de purificadores de aire <strong>comerciales</strong> en algunas salas de los colegios de Quintero y Puchuncaví. Fue considerada insuficiente por las comunidades escolares.</li>
@@ -1006,9 +889,37 @@ footer.page-footer{
       </div>
     </section>
 
-    <!-- 15. PRESUPUESTO -->
+    <!-- 7. LIMITACIONES -->
+    <section id="limitaciones">
+      <div class="section-head"><span class="num">07</span><h2>Limitaciones y honestidad científica</h2></div>
+      <p class="section-sub">Ser honestos sobre lo que nuestro proyecto puede y no puede resolver.</p>
+
+      <div class="callout honest">
+        <div class="ctitle">🔍 Lo que reconocemos abiertamente</div>
+        <ul class="clean">
+          <li>El Corsi-Rosenthal Box con filtro MERV-13 filtra muy bien las <strong>partículas</strong> (PM2.5), pero <strong>no remueve gases</strong> como el SO2, que es parte de la contaminación de Quintero.</li>
+          <li>Agregar una capa de <strong>carbón activado</strong> podría mitigar parcialmente los VOCs, pero no es una solución total para gases.</li>
+          <li>Nuestro proyecto mide específicamente <strong>PM2.5</strong>, que sí es uno de los contaminantes principales y medibles con el equipo disponible. No pretendemos resolver toda la contaminación de la zona, sino demostrar que la parte de partículas se puede atacar de forma barata y accesible.</li>
+          <li>Creemos que esto nos hace ver honestos y rigurosos ante el jurado, lo cual es mejor que pretender que solucionamos todo el problema.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 8. MATERIALES -->
+    <section id="materiales">
+      <div class="section-head"><span class="num">08</span><h2>Materiales y logística</h2></div>
+      <p class="section-sub">Elige el estado de cada material con el dropdown. Se guarda automáticamente.</p>
+
+      <div class="banner" style="padding:16px 22px;">
+        <strong>Presupuesto estimado total: $40.000 – $80.000 CLP</strong>
+      </div>
+
+      <div id="materialesGroups"></div>
+    </section>
+
+    <!-- 9. PRESUPUESTO -->
     <section id="presupuesto">
-      <div class="section-head"><span class="num">15</span><h2>Presupuesto</h2></div>
+      <div class="section-head"><span class="num">09</span><h2>Presupuesto</h2></div>
       <p class="section-sub">Tracker de gastos reales vs. estimados. Editable — se guarda automáticamente.</p>
 
       <div class="add-task-form" style="margin-bottom:18px;">
@@ -1029,12 +940,79 @@ footer.page-footer{
       <div class="budget-summary" id="budgetSummary"></div>
     </section>
 
+    <!-- 10. CRONOGRAMA -->
+    <section id="cronograma">
+      <div class="section-head"><span class="num">10</span><h2>Cronograma</h2></div>
+      <p class="section-sub">Desde hoy hasta la presentación (9 de octubre de 2026). Todo es editable: título, fechas y tareas de cada etapa, y puedes agregar o eliminar etapas. Incluye los feriados marcados: receso de Fiestas Patrias (14-20 sept) y Encuentro de Dos Mundos (12 oct).</p>
+      <div id="cronogramaList"></div>
+      <button class="btn" id="addStageBtn" style="margin-top:6px;">+ Agregar etapa</button>
+    </section>
+
+    <!-- 11. TAREAS -->
+    <section id="tareas">
+      <div class="section-head"><span class="num">11</span><h2>Tareas</h2></div>
+      <div class="task-toolbar">
+        <span class="task-stats" id="taskStats">Cargando...</span>
+      </div>
+
+      <div class="add-task-form">
+        <input type="text" id="newTaskText" placeholder="Nueva tarea...">
+        <select id="newTaskPhase">
+          <option value="Fase 1 — Preparación">Fase 1 — Preparación</option>
+          <option value="Fase 2 — Construcción">Fase 2 — Construcción</option>
+          <option value="Fase 3 — Mediciones">Fase 3 — Mediciones</option>
+          <option value="Fase 4 — Análisis y presentación">Fase 4 — Análisis y presentación</option>
+        </select>
+        <select id="newTaskAssignee">
+          <option value="Mateo">Mateo</option>
+          <option value="Skalweit">Skalweit</option>
+          <option value="Ambos">Ambos</option>
+        </select>
+        <button class="btn" id="addTaskBtn">+ Agregar tarea</button>
+      </div>
+
+      <div id="tasksContainer"></div>
+    </section>
+
+    <!-- 12. BITACORA -->
+    <section id="bitacora">
+      <div class="section-head"><span class="num">12</span><h2>Bitácora / Log</h2></div>
+      <p class="section-sub">Registro de avances día a día.</p>
+
+      <div class="log-form">
+        <input type="date" id="logDate">
+        <select id="logAuthor">
+          <option value="Mateo">Mateo</option>
+          <option value="Skalweit">Skalweit</option>
+        </select>
+        <textarea id="logText" placeholder="¿Qué se hizo hoy?"></textarea>
+        <button class="btn" id="addLogBtn">+ Agregar entrada</button>
+      </div>
+
+      <div id="logContainer"></div>
+    </section>
+
+    <!-- 13. REFERENCIAS -->
+    <section id="referencias">
+      <div class="section-head"><span class="num">13</span><h2>Referencias</h2></div>
+      <div class="table-wrap card">
+        <table>
+          <thead>
+            <tr><th>Autor / Año</th><th>Hallazgo clave</th><th>Fuente / Journal</th><th>Link</th></tr>
+          </thead>
+          <tbody id="referenciasBody"></tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:26px;">Links útiles</h3>
+      <div class="grid grid-2" id="usefulLinksGrid"></div>
+    </section>
+
     <footer class="page-footer">
-      Aire limpio para aprender · Feria Científica 2026 · Mateo Berger &amp; Skalweit
+      Aire limpio para aprender · Feria Científica 2026 · Mateo Berger &amp; Clemente Skalweit
     </footer>
 
-  </main>
-</div>
+</main>
 
 <script>
 (function(){
@@ -1044,9 +1022,9 @@ footer.page-footer{
 const LS = {
   tasks:'fc_tasks_v1',
   log:'fc_log_v1',
-  materials:'fc_materials_v1',
-  budget:'fc_budget_v1',
-  contacts:'fc_contacts_v1'
+  materials:'fc_materials_v2',
+  budget:'fc_budget_v2',
+  cronograma:'fc_cronograma_v1'
 };
 function load(key, fallback){
   try{
@@ -1064,25 +1042,18 @@ function clp(n){
 }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
-/* ---------- Sidebar / navegación ---------- */
-const sidebar = document.getElementById('sidebar');
+/* ---------- Navbar / navegación ---------- */
 const hamburgerBtn = document.getElementById('hamburgerBtn');
-const overlay = document.getElementById('overlay');
+const navLinksEl = document.getElementById('navLinks');
 hamburgerBtn.addEventListener('click', ()=>{
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('show');
+  navLinksEl.classList.toggle('open');
 });
-overlay.addEventListener('click', ()=>{
-  sidebar.classList.remove('open');
-  overlay.classList.remove('show');
-});
-const navButtons = Array.from(document.querySelectorAll('#navlist button'));
+const navButtons = Array.from(navLinksEl.querySelectorAll('button'));
 navButtons.forEach(btn=>{
   btn.addEventListener('click', ()=>{
     const target = document.getElementById(btn.dataset.target);
     if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
+    navLinksEl.classList.remove('open');
   });
 });
 const sections = navButtons.map(b=>document.getElementById(b.dataset.target)).filter(Boolean);
@@ -1100,19 +1071,12 @@ sections.forEach(s=>io.observe(s));
 const TARGET_DATE = new Date('2026-10-09T08:30:00');
 function updateCountdown(){
   const now = new Date();
-  let diff = TARGET_DATE - now;
-  if(diff < 0) diff = 0;
-  const days = Math.floor(diff/(1000*60*60*24));
-  const hours = Math.floor((diff/(1000*60*60))%24);
-  const mins = Math.floor((diff/(1000*60))%60);
-  const secs = Math.floor((diff/1000)%60);
+  const diffMs = TARGET_DATE - now;
+  const days = Math.max(0, Math.ceil(diffMs/(1000*60*60*24)));
   document.getElementById('cdDays').textContent = days;
-  document.getElementById('cdHours').textContent = String(hours).padStart(2,'0');
-  document.getElementById('cdMins').textContent = String(mins).padStart(2,'0');
-  document.getElementById('cdSecs').textContent = String(secs).padStart(2,'0');
 }
 updateCountdown();
-setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 60000);
 
 /* ---------- GLOSARIO ---------- */
 const GLOSARIO = [
@@ -1193,14 +1157,12 @@ const USEFUL_LINKS = [
 const usefulLinksGrid = document.getElementById('usefulLinksGrid');
 USEFUL_LINKS.forEach(l=>{
   const div = document.createElement('div');
-  div.className = 'card store-card';
+  div.className = 'card link-card';
   div.innerHTML = `<div class="name">${l.name}</div><p style="font-size:0.88rem;color:var(--muted);margin:0;">${l.desc}</p><a class="btn-link" href="${l.url}" target="_blank" rel="noopener">Abrir ↗</a>`;
   usefulLinksGrid.appendChild(div);
 });
 
-/* ---------- CASO / QUINTERO ya está en HTML estático ---------- */
-
-/* ---------- MATERIALES (sección 6) ---------- */
+/* ---------- MATERIALES (sección 8) ---------- */
 const MATERIALES_DEFAULT = {
   'Electrónica':[
     {id:'m1', name:'Sensor PMS5003', desc:'Sensor láser de partículas PM1.0/PM2.5/PM10', price:'$5.000 - $15.000'},
@@ -1229,15 +1191,27 @@ const MATERIALES_DEFAULT = {
     {id:'m18', name:'Cartulinas / poster digital', desc:'Material de presentación (el poster será digital)', price:'$0'}
   ]
 };
-const STATUS_OPTIONS = ['Por comprar','Verificar','Comprado','Listo'];
-function statusClass(s){
-  return 'status-' + s.toLowerCase().replace(/\s+/g,'-').normalize('NFD').replace(/[̀-ͯ]/g,'');
+const STATUS_META = {
+  'Por comprar':'st-por-comprar',
+  'Comprado y en camino':'st-comprado-y-en-camino',
+  'Listo':'st-listo',
+  'Descartado':'st-descartado'
+};
+const STATUS_OPTIONS = Object.keys(STATUS_META);
+function normalizeStatus(s){
+  if(STATUS_OPTIONS.includes(s)) return s;
+  if(s==='Comprado') return 'Comprado y en camino';
+  return 'Por comprar';
 }
 let materialsState = load(LS.materials, null);
 if(!materialsState){
   materialsState = {};
   Object.values(MATERIALES_DEFAULT).flat().forEach(m=>{ materialsState[m.id] = 'Por comprar'; });
   save(LS.materials, materialsState);
+}else{
+  Object.values(MATERIALES_DEFAULT).flat().forEach(m=>{
+    materialsState[m.id] = normalizeStatus(materialsState[m.id]);
+  });
 }
 function renderMateriales(){
   const container = document.getElementById('materialesGroups');
@@ -1260,7 +1234,7 @@ function renderMateriales(){
       tr.innerHTML = `<td><strong>${item.name}</strong></td><td>${item.desc}</td><td>${item.price}</td><td></td>`;
       const statusCell = tr.children[3];
       const select = document.createElement('select');
-      select.className = 'status-select';
+      select.className = 'status-select ' + STATUS_META[status];
       STATUS_OPTIONS.forEach(opt=>{
         const o = document.createElement('option');
         o.value = opt; o.textContent = opt;
@@ -1268,7 +1242,9 @@ function renderMateriales(){
         select.appendChild(o);
       });
       select.addEventListener('change', ()=>{
-        materialsState[item.id] = select.value;
+        const val = select.value;
+        materialsState[item.id] = val;
+        select.className = 'status-select ' + STATUS_META[val];
         save(LS.materials, materialsState);
       });
       statusCell.appendChild(select);
@@ -1282,53 +1258,185 @@ function renderMateriales(){
 }
 renderMateriales();
 
-/* ---------- DONDE COMPRAR ---------- */
-const STORES = [
-  {name:'MechatronicStore', desc:'Arduino, sensores y componentes electrónicos.', url:'https://www.mechatronicstore.cl'},
-  {name:'Altronics', desc:'Electrónica en general, retiro en San Miguel.', url:'https://www.altronics.cl'},
-  {name:'Geek Factory', desc:'Arduino y módulos electrónicos.', url:'https://www.geekfactory.cl'},
-  {name:'Labtroniks', desc:'Sensores y componentes.', url:'https://www.labtroniks.cl'},
-  {name:'Triacs', desc:'Arduino y cables.', url:'https://www.triacs.cl'},
-  {name:'MaxElectrónica', desc:'Tienda de electrónica en Valparaíso.', url:'https://www.maxelectronica.cl'},
-  {name:'MercadoLibre Chile', desc:'Buscar "PMS5003" o "sensor PM2.5".', url:'https://www.mercadolibre.cl'},
-  {name:'AliExpress', desc:'Más barato, pero 2-3 semanas de envío: ¡pedir YA!', url:'https://www.aliexpress.com', warn:true},
-  {name:'Shopee Chile', desc:'Alternativa online con despacho rápido.', url:'https://shopee.cl'},
-  {name:'Anwo', desc:'Filtros MERV-13 industriales.', url:'https://www.anwo.cl'},
-  {name:'Sodimac', desc:'Ventiladores, telas y materiales de construcción.', url:'https://www.sodimac.cl'},
-  {name:'Falabella', desc:'Referencia de precios de purificadores comerciales para comparar.', url:'https://www.falabella.com'}
+/* ---------- CRONOGRAMA (sección 10, totalmente editable) ---------- */
+const CRONOGRAMA_DEFAULT = [
+  {title:'Semana 1', dates:'22 - 25 de agosto', holiday:false, milestone:false, items:[
+    {text:'Comprar sensor PMS5003 y Arduino', date:''},
+    {text:'Definir protocolo de medición', date:''},
+    {text:'Meta: tener todos los materiales clave', date:''},
+    {text:'DEADLINE: cerrar logística e investigación', date:'26 ago'}
+  ]},
+  {title:'Semana 2', dates:'26 de agosto - 1 de septiembre', holiday:false, milestone:false, items:[
+    {text:'Programar Arduino + sensor', date:''},
+    {text:'Construir primer prototipo', date:''},
+    {text:'Pruebas piloto', date:''}
+  ]},
+  {title:'Semana 3', dates:'2 - 8 de septiembre', holiday:false, milestone:false, items:[
+    {text:'Construir purificadores con todos los filtros', date:''},
+    {text:'Estandarizar condiciones de prueba', date:''}
+  ]},
+  {title:'Semana 4', dates:'9 - 13 de septiembre', holiday:false, milestone:true, items:[
+    {text:'MEDICIONES — semana clave antes del receso', date:''},
+    {text:'Probar cada filtro, mínimo 3 repeticiones', date:''}
+  ]},
+  {title:'Receso — Fiestas Patrias', dates:'14 - 20 de septiembre', holiday:true, milestone:false, items:[
+    {text:'No hay clases (14 al 19)', date:''},
+    {text:'Retorno a clases: lunes 21 de septiembre', date:'21 sept'},
+    {text:'Tiempo libre para avanzar análisis o descansar', date:''}
+  ]},
+  {title:'Semana 5', dates:'21 - 27 de septiembre', holiday:false, milestone:false, items:[
+    {text:'Análisis de datos', date:''},
+    {text:'Gráficos comparativos', date:''},
+    {text:'Cálculo de costo-eficiencia', date:''}
+  ]},
+  {title:'Semana 6', dates:'28 de septiembre - 4 de octubre', holiday:false, milestone:false, items:[
+    {text:'Redactar informe', date:''},
+    {text:'Propuesta de implementación para Quintero', date:''},
+    {text:'Diseñar poster digital', date:''}
+  ]},
+  {title:'Semana 7', dates:'5 - 8 de octubre', holiday:false, milestone:false, items:[
+    {text:'Ajustes finales', date:''},
+    {text:'Ensayo general', date:''}
+  ]},
+  {title:'9 de octubre', dates:'Día de la presentación', holiday:false, milestone:true, items:[
+    {text:'¡Presentación final del proyecto!', date:'9 oct'}
+  ]},
+  {title:'12 de octubre', dates:'Feriado — Encuentro de Dos Mundos', holiday:true, milestone:false, items:[
+    {text:'Feriado nacional (posterior a nuestra presentación del 9 de octubre)', date:'12 oct'}
+  ]}
 ];
-const storesGrid = document.getElementById('storesGrid');
-STORES.forEach(s=>{
-  const div = document.createElement('div');
-  div.className = 'card store-card';
-  div.innerHTML = `<div class="name">${s.name}</div><p style="font-size:0.88rem;color:var(--muted);margin:0;">${s.desc}</p>${s.warn?'<p class="note">⏱ Pedir con anticipación</p>':''}<a class="btn-link" href="${s.url}" target="_blank" rel="noopener">Visitar ↗</a>`;
-  storesGrid.appendChild(div);
-});
+let cronograma = load(LS.cronograma, null);
+if(!cronograma){
+  cronograma = CRONOGRAMA_DEFAULT.map(w=>({
+    id:uid(), title:w.title, dates:w.dates, holiday:w.holiday, milestone:w.milestone,
+    items:w.items.map(i=>({id:uid(), text:i.text, date:i.date}))
+  }));
+  save(LS.cronograma, cronograma);
+}
+function saveCronograma(){ save(LS.cronograma, cronograma); }
+function renderCronograma(){
+  const container = document.getElementById('cronogramaList');
+  container.innerHTML = '';
+  cronograma.forEach(stage=>{
+    const card = document.createElement('div');
+    card.className = 'card week-card' + (stage.holiday?' holiday':'') + (stage.milestone?' milestone':'');
 
-/* ---------- CRONOGRAMA ---------- */
-const CRONOGRAMA = [
-  {title:'Semana 1', dates:'22 - 25 de agosto', items:['Comprar sensor PMS5003 y Arduino','Definir protocolo de medición','Meta: tener todos los materiales clave'], deadline:'DEADLINE: 26 de agosto para cerrar logística e investigación'},
-  {title:'Semana 2', dates:'26 de agosto - 1 de septiembre', items:['Programar Arduino + sensor','Construir primer prototipo','Pruebas piloto']},
-  {title:'Semana 3', dates:'2 - 8 de septiembre', items:['Construir purificadores con todos los filtros','Estandarizar condiciones de prueba']},
-  {title:'Semana 4', dates:'9 - 13 de septiembre', items:['MEDICIONES — semana clave antes del receso','Probar cada filtro, mínimo 3 repeticiones'], milestone:true},
-  {title:'Receso — Fiestas Patrias', dates:'14 - 20 de septiembre', items:['No hay clases (14 al 19)','Retorno a clases: lunes 21 de septiembre','Tiempo libre para avanzar análisis o descansar'], receso:true},
-  {title:'Semana 5', dates:'21 - 27 de septiembre', items:['Análisis de datos','Gráficos comparativos','Cálculo de costo-eficiencia']},
-  {title:'Semana 6', dates:'28 de septiembre - 4 de octubre', items:['Redactar informe','Propuesta de implementación para Quintero','Diseñar poster digital']},
-  {title:'Semana 7', dates:'5 - 8 de octubre', items:['Ajustes finales','Ensayo general']},
-  {title:'9 de octubre', dates:'Día de la presentación', items:['¡Presentación final del proyecto!'], milestone:true}
-];
-const cronogramaList = document.getElementById('cronogramaList');
-CRONOGRAMA.forEach(w=>{
-  const div = document.createElement('div');
-  div.className = 'card week-card' + (w.receso?' receso':'') + (w.milestone?' milestone':'');
-  div.style.marginBottom = '12px';
-  div.innerHTML = `
-    <div class="wk-title"><span>${w.title}</span><span class="wk-dates">${w.dates}</span></div>
-    <ul>${w.items.map(i=>`<li>${i}</li>`).join('')}</ul>
-    ${w.deadline?`<div style="margin-top:10px;"><span class="tag-deadline">${w.deadline}</span></div>`:''}
-  `;
-  cronogramaList.appendChild(div);
+    const head = document.createElement('div');
+    head.className = 'stage-card-head';
+
+    const titleInput = document.createElement('input');
+    titleInput.type = 'text';
+    titleInput.className = 'stage-title-input';
+    titleInput.value = stage.title;
+    titleInput.addEventListener('input', ()=>{ stage.title = titleInput.value; saveCronograma(); });
+
+    const btnGroup = document.createElement('div');
+    btnGroup.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;align-items:center;';
+
+    const holidayBtn = document.createElement('button');
+    holidayBtn.type = 'button';
+    holidayBtn.className = 'flag-btn holiday-btn' + (stage.holiday?' active':'');
+    holidayBtn.textContent = '🎉 Feriado';
+    holidayBtn.addEventListener('click', ()=>{
+      stage.holiday = !stage.holiday;
+      saveCronograma();
+      renderCronograma();
+    });
+
+    const milestoneBtn = document.createElement('button');
+    milestoneBtn.type = 'button';
+    milestoneBtn.className = 'flag-btn milestone-btn' + (stage.milestone?' active':'');
+    milestoneBtn.textContent = '⭐ Hito';
+    milestoneBtn.addEventListener('click', ()=>{
+      stage.milestone = !stage.milestone;
+      saveCronograma();
+      renderCronograma();
+    });
+
+    const delStageBtn = document.createElement('button');
+    delStageBtn.type = 'button';
+    delStageBtn.className = 'del-btn';
+    delStageBtn.title = 'Eliminar etapa';
+    delStageBtn.innerHTML = '✕';
+    delStageBtn.addEventListener('click', ()=>{
+      cronograma = cronograma.filter(s=>s.id!==stage.id);
+      saveCronograma();
+      renderCronograma();
+    });
+
+    btnGroup.appendChild(holidayBtn);
+    btnGroup.appendChild(milestoneBtn);
+    btnGroup.appendChild(delStageBtn);
+    head.appendChild(titleInput);
+    head.appendChild(btnGroup);
+    card.appendChild(head);
+
+    const datesInput = document.createElement('input');
+    datesInput.type = 'text';
+    datesInput.className = 'stage-dates-input';
+    datesInput.placeholder = 'Fechas (ej: 22 - 25 de agosto)';
+    datesInput.value = stage.dates;
+    datesInput.addEventListener('input', ()=>{ stage.dates = datesInput.value; saveCronograma(); });
+    card.appendChild(datesInput);
+
+    const itemsWrap = document.createElement('div');
+    itemsWrap.className = 'stage-items';
+    stage.items.forEach(item=>{
+      const row = document.createElement('div');
+      row.className = 'stage-item-row';
+
+      const dateInput = document.createElement('input');
+      dateInput.type = 'text';
+      dateInput.className = 'item-date';
+      dateInput.placeholder = 'fecha';
+      dateInput.value = item.date || '';
+      dateInput.addEventListener('input', ()=>{ item.date = dateInput.value; saveCronograma(); });
+
+      const textInput = document.createElement('input');
+      textInput.type = 'text';
+      textInput.className = 'item-text';
+      textInput.placeholder = 'Descripción de la tarea';
+      textInput.value = item.text;
+      textInput.addEventListener('input', ()=>{ item.text = textInput.value; saveCronograma(); });
+
+      const delItemBtn = document.createElement('button');
+      delItemBtn.type = 'button';
+      delItemBtn.className = 'del-btn';
+      delItemBtn.title = 'Eliminar tarea';
+      delItemBtn.innerHTML = '✕';
+      delItemBtn.addEventListener('click', ()=>{
+        stage.items = stage.items.filter(i=>i.id!==item.id);
+        saveCronograma();
+        renderCronograma();
+      });
+
+      row.appendChild(dateInput);
+      row.appendChild(textInput);
+      row.appendChild(delItemBtn);
+      itemsWrap.appendChild(row);
+    });
+    card.appendChild(itemsWrap);
+
+    const addItemBtn = document.createElement('button');
+    addItemBtn.type = 'button';
+    addItemBtn.className = 'btn ghost stage-add-item-btn';
+    addItemBtn.textContent = '+ tarea';
+    addItemBtn.addEventListener('click', ()=>{
+      stage.items.push({id:uid(), text:'', date:''});
+      saveCronograma();
+      renderCronograma();
+    });
+    card.appendChild(addItemBtn);
+
+    container.appendChild(card);
+  });
+}
+document.getElementById('addStageBtn').addEventListener('click', ()=>{
+  cronograma.push({id:uid(), title:'Nueva etapa', dates:'', holiday:false, milestone:false, items:[]});
+  saveCronograma();
+  renderCronograma();
 });
+renderCronograma();
 
 /* ---------- TAREAS ---------- */
 const TASKS_DEFAULT = [
@@ -1458,8 +1566,8 @@ function updateProgress(){
   const total = tasks.length;
   const done = tasks.filter(t=>t.done).length;
   const pct = total>0 ? Math.round((done/total)*100) : 0;
-  document.getElementById('sidebarProgressBar').style.width = pct+'%';
-  document.getElementById('sidebarProgressPct').textContent = pct+'%';
+  document.getElementById('navProgressBar').style.width = pct+'%';
+  document.getElementById('navProgressPct').textContent = pct+'%';
   document.getElementById('mainProgressBar').style.width = pct+'%';
   document.getElementById('mainProgressText').textContent = `${done} de ${total} tareas completadas (${pct}%)`;
 }
@@ -1514,46 +1622,6 @@ document.getElementById('addLogBtn').addEventListener('click', ()=>{
 });
 renderLog();
 
-/* ---------- CONTACTOS ---------- */
-const CONTACTS_DEFAULT = [
-  {id:'c1', role:'Profesor(a) de Química', name:'', email:''},
-  {id:'c2', role:'Profesor de Tecnología', name:'', email:''},
-  {id:'c3', role:'Profesor guía', name:'', email:''}
-];
-let contactsState = load(LS.contacts, CONTACTS_DEFAULT);
-function renderContacts(){
-  const grid = document.getElementById('contactsGrid');
-  grid.innerHTML = '';
-  contactsState.forEach(c=>{
-    const div = document.createElement('div');
-    div.className = 'card contact-card';
-    div.innerHTML = `
-      <h4>${c.role}</h4>
-      <label>Nombre</label>
-      <input type="text" data-field="name" placeholder="Nombre completo" value="${c.name}">
-      <label>Email / contacto</label>
-      <input type="text" data-field="email" placeholder="correo@colegio.cl" value="${c.email}">
-    `;
-    div.querySelectorAll('input').forEach(inp=>{
-      inp.addEventListener('input', ()=>{
-        c[inp.dataset.field] = inp.value;
-        save(LS.contacts, contactsState);
-      });
-    });
-    grid.appendChild(div);
-  });
-  const backupDiv = document.createElement('div');
-  backupDiv.className = 'card contact-card';
-  backupDiv.innerHTML = `
-    <h4>Departamento de Ciencias</h4>
-    <p style="margin-top:8px;">
-      <span class="badge status-listo">✓ Respaldo confirmado</span>
-    </p>
-  `;
-  grid.appendChild(backupDiv);
-}
-renderContacts();
-
 /* ---------- PRESUPUESTO ---------- */
 const BUDGET_DEFAULT = [
   {item:'Sensor PMS5003', est:10000},
@@ -1569,6 +1637,13 @@ const BUDGET_DEFAULT = [
   {item:'Cartón', est:1000},
   {item:'Materiales poster digital', est:0}
 ];
+const PAGADOR_META = {
+  'Mateo':'pg-mateo',
+  'Skalweit':'pg-skalweit',
+  'Ambos':'pg-ambos',
+  'Colegio':'pg-colegio'
+};
+const PAGADOR_OPTIONS = Object.keys(PAGADOR_META);
 let budget = load(LS.budget, null);
 if(!budget){
   budget = BUDGET_DEFAULT.map(b=>({id:uid(), item:b.item, est:b.est, real:'', pagador:'Mateo', estado:'Pendiente'}));
@@ -1578,7 +1653,7 @@ function renderBudget(){
   const body = document.getElementById('budgetBody');
   body.innerHTML = '';
   let totalEst = 0, totalReal = 0;
-  const porPagador = {Mateo:0, Skalweit:0, Colegio:0};
+  const porPagador = {Mateo:0, Skalweit:0, Ambos:0, Colegio:0};
 
   budget.forEach(b=>{
     totalEst += Number(b.est)||0;
@@ -1603,8 +1678,8 @@ function renderBudget(){
 
     const pagCell = tr.children[3];
     const pagSelect = document.createElement('select');
-    pagSelect.className = 'pagador-select';
-    ['Mateo','Skalweit','Colegio'].forEach(opt=>{
+    pagSelect.className = 'pagador-select ' + PAGADOR_META[b.pagador];
+    PAGADOR_OPTIONS.forEach(opt=>{
       const o = document.createElement('option');
       o.value = opt; o.textContent = opt;
       if(opt===b.pagador) o.selected = true;
@@ -1612,6 +1687,7 @@ function renderBudget(){
     });
     pagSelect.addEventListener('change', ()=>{
       b.pagador = pagSelect.value;
+      pagSelect.className = 'pagador-select ' + PAGADOR_META[b.pagador];
       save(LS.budget, budget);
       renderBudget();
     });
@@ -1653,6 +1729,7 @@ function renderBudget(){
     <div class="sbox"><div class="n">${clp(totalReal)}</div><div class="l">Total real gastado</div></div>
     <div class="sbox"><div class="n">${clp(porPagador.Mateo)}</div><div class="l">Pagado por Mateo</div></div>
     <div class="sbox"><div class="n">${clp(porPagador.Skalweit)}</div><div class="l">Pagado por Skalweit</div></div>
+    <div class="sbox"><div class="n">${clp(porPagador.Ambos)}</div><div class="l">Pagado por Ambos</div></div>
     <div class="sbox"><div class="n">${clp(porPagador.Colegio)}</div><div class="l">Pagado por el colegio</div></div>
   `;
 }
