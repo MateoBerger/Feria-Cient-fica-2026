@@ -1,0 +1,1679 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aire limpio para aprender — Dashboard de Proyecto</title>
+<meta name="description" content="Dashboard de proyecto de feria científica: purificadores de aire de bajo costo para salas de clase en zonas de sacrificio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#1B4965;
+  --primary-dark:#123449;
+  --accent:#CAE9FF;
+  --white:#ffffff;
+  --coral:#E76F51;
+  --green:#2A9D8F;
+  --purple:#7C3AED;
+  --blue:#2563EB;
+  --ink:#1c2b33;
+  --muted:#5c7180;
+  --bg:#f4f8fb;
+  --card-border:#e3edf3;
+  --shadow: 0 2px 10px rgba(27,73,101,0.06), 0 1px 2px rgba(27,73,101,0.08);
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.55;
+}
+h1,h2,h3,h4{
+  font-family:'DM Sans',sans-serif;
+  color:var(--primary);
+  margin-top:0;
+}
+a{color:var(--primary);}
+button, select, input, textarea{font-family:inherit;}
+
+/* Layout */
+.app{display:flex;min-height:100vh;}
+
+.sidebar{
+  width:270px;
+  flex-shrink:0;
+  background:linear-gradient(180deg,var(--primary),var(--primary-dark));
+  color:var(--accent);
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:22px 16px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  z-index:50;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 6px;
+}
+.brand .dot{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--coral);
+  box-shadow:0 0 0 4px rgba(231,111,81,0.25);
+  flex-shrink:0;
+}
+.brand h1{
+  color:#fff;
+  font-size:1.02rem;
+  line-height:1.25;
+  margin:0;
+}
+.sidebar-progress{
+  background:rgba(255,255,255,0.08);
+  border-radius:10px;
+  padding:12px 14px;
+}
+.sidebar-progress .label{
+  font-size:0.72rem;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--accent);
+  opacity:0.85;
+  margin-bottom:6px;
+  display:flex;
+  justify-content:space-between;
+}
+.bar-track{
+  width:100%;
+  height:9px;
+  background:rgba(255,255,255,0.15);
+  border-radius:999px;
+  overflow:hidden;
+}
+.bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--green),#5fd3c4);
+  border-radius:999px;
+  transition:width .4s ease;
+  width:0%;
+}
+nav.navlist{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  flex:1;
+  overflow-y:auto;
+}
+nav.navlist button{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:none;
+  border:none;
+  color:var(--accent);
+  text-align:left;
+  padding:9px 10px;
+  border-radius:9px;
+  cursor:pointer;
+  font-size:0.87rem;
+  font-weight:500;
+  opacity:0.85;
+  transition:background .15s, opacity .15s;
+}
+nav.navlist button .ico{font-size:1rem;width:20px;text-align:center;}
+nav.navlist button:hover{background:rgba(255,255,255,0.08);opacity:1;}
+nav.navlist button.active{background:rgba(255,255,255,0.16);opacity:1;color:#fff;font-weight:700;}
+.sidebar-footer{
+  font-size:0.72rem;
+  color:var(--accent);
+  opacity:0.65;
+  padding:0 6px;
+}
+
+.hamburger{
+  display:none;
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:100;
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  font-size:1.3rem;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+}
+
+main{
+  flex:1;
+  min-width:0;
+  padding:32px clamp(16px,4vw,48px) 80px;
+  max-width:1180px;
+}
+
+section{
+  margin-bottom:56px;
+  scroll-margin-top:20px;
+}
+section .section-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:18px;
+  padding-bottom:10px;
+  border-bottom:2px solid var(--card-border);
+}
+section .section-head .num{
+  color:var(--accent);
+  background:var(--primary);
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  font-size:0.75rem;
+  padding:3px 9px;
+  border-radius:999px;
+}
+section .section-head h2{margin:0;font-size:1.5rem;}
+section .section-sub{color:var(--muted);margin:-10px 0 18px;font-size:0.95rem;}
+
+.card{
+  background:var(--white);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px 22px;
+}
+.grid{
+  display:grid;
+  gap:16px;
+}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
+
+/* Hero / resumen */
+.hero{
+  background:linear-gradient(135deg,var(--primary),#2c6a8f);
+  color:#fff;
+  border-radius:18px;
+  padding:28px 30px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
+.hero h2{color:#fff;font-size:1.7rem;margin-bottom:6px;}
+.hero .tagline{color:var(--accent);font-size:1rem;margin-bottom:18px;}
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+.meta-chip{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);
+  padding:6px 13px;
+  border-radius:999px;
+  font-size:0.83rem;
+}
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:14px;
+}
+.stat-box{
+  background:rgba(255,255,255,0.1);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.stat-box .num{font-family:'DM Sans',sans-serif;font-size:1.9rem;font-weight:800;line-height:1;}
+.stat-box .lbl{font-size:0.78rem;color:var(--accent);margin-top:4px;}
+
+.countdown{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.countdown .box{
+  background:#fff;
+  color:var(--primary);
+  border-radius:10px;
+  padding:10px 16px;
+  text-align:center;
+  min-width:68px;
+}
+.countdown .box .n{font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.5rem;}
+.countdown .box .u{font-size:0.68rem;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;}
+
+.design-grid{margin-top:18px;}
+.design-item{margin-bottom:10px;}
+.design-item .k{font-weight:700;color:var(--primary);font-size:0.85rem;text-transform:uppercase;letter-spacing:.03em;}
+.design-item .v{margin-top:2px;}
+ul.clean{margin:6px 0 0;padding-left:20px;}
+ul.clean li{margin-bottom:4px;}
+
+/* Glosario */
+.term-card{
+  border-left:4px solid var(--primary);
+}
+.term-card .term{
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  color:var(--primary);
+  margin-bottom:6px;
+  font-size:1rem;
+}
+.term-card p{margin:0;font-size:0.92rem;color:var(--ink);}
+
+/* Papers */
+.paper-card{
+  border-left:5px solid var(--green);
+  position:relative;
+}
+.paper-card.cr{border-left-color:var(--purple);}
+.paper-card .author{font-weight:700;font-family:'DM Sans',sans-serif;color:var(--ink);}
+.paper-card .journal{color:var(--muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;}
+.paper-card .finding{font-size:0.93rem;}
+.paper-group h3{margin:26px 0 12px;font-size:1.1rem;color:var(--primary);}
+
+/* Banner / callouts */
+.banner{
+  background:linear-gradient(120deg,#123449,var(--primary));
+  color:#fff;
+  border-radius:16px;
+  padding:22px 26px;
+  margin-bottom:20px;
+}
+.banner h3{color:#fff;margin-bottom:14px;}
+.callout{
+  border-radius:var(--radius);
+  padding:18px 20px;
+  border:1.5px solid;
+  margin:16px 0;
+}
+.callout.info{background:#eef7ff;border-color:#a9d4f5;}
+.callout.warn{background:#fff4ee;border-color:#f3c3ab;}
+.callout.honest{background:#f2f9f7;border-color:#a9dcd3;}
+.callout .ctitle{font-weight:700;font-family:'DM Sans',sans-serif;margin-bottom:6px;display:flex;gap:8px;align-items:center;}
+
+/* Timeline */
+.timeline{
+  position:relative;
+  margin-left:10px;
+  padding-left:26px;
+  border-left:3px solid var(--accent);
+}
+.tl-item{
+  position:relative;
+  margin-bottom:22px;
+}
+.tl-item::before{
+  content:'';
+  position:absolute;
+  left:-33px;
+  top:4px;
+  width:14px;height:14px;
+  border-radius:50%;
+  background:var(--primary);
+  border:3px solid var(--accent);
+}
+.tl-item.highlight::before{background:var(--coral);}
+.tl-item .tl-date{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--primary);font-size:0.95rem;}
+.tl-item.highlight .tl-date{color:var(--coral);}
+.tl-item p{margin:4px 0 0;font-size:0.92rem;}
+
+/* Tables */
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.88rem;
+}
+th,td{
+  text-align:left;
+  padding:10px 12px;
+  border-bottom:1px solid var(--card-border);
+  vertical-align:middle;
+}
+th{
+  color:var(--primary);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+  background:#f7fbfd;
+}
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--card-border);}
+.table-wrap table{margin:0;}
+.table-wrap .card{padding:0;}
+
+select.status-select, select.assignee-select, select.pagador-select, select.estado-select{
+  border-radius:8px;
+  border:1px solid var(--card-border);
+  padding:6px 8px;
+  font-size:0.82rem;
+  cursor:pointer;
+  background:#fff;
+}
+.badge{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:0.75rem;
+  font-weight:600;
+}
+.badge.status-por-comprar{background:#fde2e2;color:#b3261e;}
+.badge.status-verificar{background:#fff3cd;color:#8a6300;}
+.badge.status-comprado{background:#d9ecff;color:#1B4965;}
+.badge.status-listo{background:#d7f2ec;color:#146b5c;}
+
+/* Stores */
+.store-card{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.store-card .name{font-family:'DM Sans',sans-serif;font-weight:700;color:var(--primary);}
+.store-card a.btn-link{
+  align-self:flex-start;
+  margin-top:4px;
+}
+.btn-link{
+  display:inline-block;
+  background:var(--primary);
+  color:#fff !important;
+  text-decoration:none;
+  padding:7px 14px;
+  border-radius:8px;
+  font-size:0.82rem;
+  font-weight:600;
+}
+.btn-link:hover{background:var(--primary-dark);}
+.note{font-size:0.8rem;color:var(--coral);font-weight:600;}
+
+/* Cronograma */
+.week-card{
+  border-left:5px solid var(--primary);
+}
+.week-card.receso{
+  border-left-color:var(--coral);
+  background:#fff8f5;
+}
+.week-card.milestone{
+  border-left-color:var(--green);
+  background:#f3fbf9;
+}
+.week-card .wk-title{
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  color:var(--primary);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.week-card.receso .wk-title{color:var(--coral);}
+.week-card.milestone .wk-title{color:var(--green);}
+.week-card .wk-dates{font-size:0.78rem;color:var(--muted);font-weight:500;}
+.week-card ul{margin:10px 0 0;padding-left:20px;font-size:0.9rem;}
+.tag-deadline{
+  background:var(--coral);
+  color:#fff;
+  font-size:0.7rem;
+  padding:2px 8px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+/* Tasks */
+.task-toolbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+.task-stats{font-size:0.88rem;color:var(--muted);}
+.add-task-form{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  background:#f7fbfd;
+  border:1px dashed var(--accent);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:22px;
+}
+.add-task-form input[type=text]{
+  flex:1;
+  min-width:200px;
+  padding:9px 12px;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-size:0.9rem;
+}
+.add-task-form select{
+  padding:9px 10px;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-size:0.9rem;
+}
+.btn{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  padding:9px 16px;
+  border-radius:8px;
+  font-weight:600;
+  font-size:0.88rem;
+  cursor:pointer;
+}
+.btn:hover{background:var(--primary-dark);}
+.btn.coral{background:var(--coral);}
+.btn.coral:hover{background:#cf5a3d;}
+.btn.ghost{background:transparent;color:var(--primary);border:1px solid var(--card-border);}
+
+.phase-block{margin-bottom:26px;}
+.phase-block h3{
+  font-size:1.02rem;
+  color:var(--primary);
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.phase-block h3 .count{
+  font-size:0.72rem;
+  background:var(--accent);
+  color:var(--primary);
+  padding:2px 9px;
+  border-radius:999px;
+  font-weight:700;
+}
+.task-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#fff;
+  border:1px solid var(--card-border);
+  border-left:5px solid var(--muted);
+  border-radius:10px;
+  padding:10px 14px;
+  margin-bottom:8px;
+}
+.task-row.assign-mateo{border-left-color:var(--blue);}
+.task-row.assign-skalweit{border-left-color:var(--purple);}
+.task-row.assign-ambos{border-left-color:var(--green);}
+.task-row.done{opacity:0.55;}
+.task-row.done .task-text{text-decoration:line-through;}
+.task-row input[type=checkbox]{
+  width:19px;height:19px;
+  accent-color:var(--green);
+  cursor:pointer;
+  flex-shrink:0;
+}
+.task-row .task-text{flex:1;font-size:0.92rem;}
+.assignee-pill{
+  font-size:0.72rem;
+  font-weight:700;
+  padding:3px 10px;
+  border-radius:999px;
+  color:#fff;
+}
+.assignee-pill.mateo{background:var(--blue);}
+.assignee-pill.skalweit{background:var(--purple);}
+.assignee-pill.ambos{background:var(--green);}
+.task-row .del-btn{
+  background:none;
+  border:none;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:0.95rem;
+  padding:2px 6px;
+}
+.task-row .del-btn:hover{color:var(--coral);}
+
+/* Bitacora */
+.log-form{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  background:#f7fbfd;
+  border:1px dashed var(--accent);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:22px;
+}
+.log-form input[type=date], .log-form select{
+  padding:9px 10px;border:1px solid var(--card-border);border-radius:8px;font-size:0.88rem;
+}
+.log-form textarea{
+  flex:1;min-width:220px;padding:9px 12px;border:1px solid var(--card-border);border-radius:8px;font-size:0.9rem;font-family:inherit;resize:vertical;min-height:42px;
+}
+.log-entry{
+  border-left:4px solid var(--primary);
+  margin-bottom:10px;
+}
+.log-entry.author-skalweit{border-left-color:var(--purple);}
+.log-entry .log-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.log-entry .log-date{font-size:0.78rem;color:var(--muted);}
+.log-entry p{margin:0;font-size:0.92rem;white-space:pre-wrap;}
+.empty-state{color:var(--muted);font-size:0.9rem;font-style:italic;padding:12px 0;}
+
+/* Contactos */
+.contact-card label{
+  display:block;
+  font-size:0.72rem;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--muted);
+  margin:10px 0 4px;
+}
+.contact-card label:first-child{margin-top:0;}
+.contact-card input[type=text]{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-size:0.9rem;
+}
+.contact-card h4{margin-bottom:4px;color:var(--primary);}
+
+/* Setup experimental */
+.setup-card h4{
+  color:var(--primary);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.setup-card ol{padding-left:22px;margin:10px 0 0;}
+.setup-card ol li{margin-bottom:8px;font-size:0.92rem;}
+.opt-tag{
+  font-size:0.7rem;
+  background:var(--accent);
+  color:var(--primary);
+  padding:2px 9px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+/* Budget */
+.budget-summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+.budget-summary .sbox{
+  background:#f7fbfd;
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.budget-summary .sbox .n{font-family:'DM Sans',sans-serif;font-weight:800;font-size:1.35rem;color:var(--primary);}
+.budget-summary .sbox .l{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+input.real-price-input{
+  width:100px;
+  padding:6px 8px;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-size:0.85rem;
+}
+
+footer.page-footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.8rem;
+  padding:20px 0 40px;
+}
+
+@media (max-width: 860px){
+  .sidebar{
+    position:fixed;
+    left:-290px;
+    top:0;
+    transition:left .25s ease;
+    box-shadow:2px 0 20px rgba(0,0,0,0.25);
+  }
+  .sidebar.open{left:0;}
+  .hamburger{display:block;}
+  main{padding-top:70px;}
+  .overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.35);
+    z-index:40;
+  }
+  .overlay.show{display:block;}
+}
+</style>
+</head>
+<body>
+
+<button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú">☰</button>
+<div class="overlay" id="overlay"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="dot"></div>
+      <h1>Aire limpio para aprender</h1>
+    </div>
+
+    <div class="sidebar-progress">
+      <div class="label"><span>Progreso general</span><span id="sidebarProgressPct">0%</span></div>
+      <div class="bar-track"><div class="bar-fill" id="sidebarProgressBar"></div></div>
+    </div>
+
+    <nav class="navlist" id="navlist">
+      <button data-target="resumen"><span class="ico">📊</span>Resumen del proyecto</button>
+      <button data-target="glosario"><span class="ico">📖</span>Glosario</button>
+      <button data-target="marco-teorico"><span class="ico">🔬</span>Marco teórico</button>
+      <button data-target="quintero"><span class="ico">🏭</span>Caso Quintero-Puchuncaví</button>
+      <button data-target="limitaciones"><span class="ico">⚖️</span>Limitaciones y honestidad</button>
+      <button data-target="materiales"><span class="ico">🧰</span>Materiales y logística</button>
+      <button data-target="donde-comprar"><span class="ico">🛒</span>Dónde comprar</button>
+      <button data-target="cronograma"><span class="ico">🗓️</span>Cronograma</button>
+      <button data-target="tareas"><span class="ico">✅</span>Tareas</button>
+      <button data-target="bitacora"><span class="ico">📝</span>Bitácora</button>
+      <button data-target="contactos"><span class="ico">👥</span>Contactos</button>
+      <button data-target="referencias"><span class="ico">📚</span>Referencias</button>
+      <button data-target="setup"><span class="ico">🧪</span>Setup experimental</button>
+      <button data-target="antecedentes"><span class="ico">🏫</span>Antecedentes en Quintero</button>
+      <button data-target="presupuesto"><span class="ico">💰</span>Presupuesto</button>
+    </nav>
+
+    <div class="sidebar-footer">Feria Científica 2026 · Mateo Berger &amp; Skalweit</div>
+  </aside>
+
+  <main>
+
+    <!-- 1. RESUMEN -->
+    <section id="resumen">
+      <div class="section-head"><span class="num">01</span><h2>Resumen del proyecto</h2></div>
+
+      <div class="hero">
+        <h2>Aire limpio para aprender</h2>
+        <div class="tagline">Purificadores de bajo costo para salas de clase en zonas de sacrificio</div>
+        <div class="meta-row">
+          <span class="meta-chip">🧪 Área: Física y Química</span>
+          <span class="meta-chip">👥 Mateo Berger &amp; Skalweit</span>
+          <span class="meta-chip">🎓 4to Medio</span>
+          <span class="meta-chip">📅 Presentación: 9 de octubre de 2026</span>
+        </div>
+        <div class="countdown" id="countdownBox">
+          <div class="box"><div class="n" id="cdDays">--</div><div class="u">días</div></div>
+          <div class="box"><div class="n" id="cdHours">--</div><div class="u">horas</div></div>
+          <div class="box"><div class="n" id="cdMins">--</div><div class="u">min</div></div>
+          <div class="box"><div class="n" id="cdSecs">--</div><div class="u">seg</div></div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-bottom:16px;">
+        <div class="card">
+          <h3>Objetivo</h3>
+          <p>Ganar la feria científica del colegio y luego avanzar y ganar la instancia intercolegial.</p>
+          <h3 style="margin-top:16px;">Descripción</h3>
+          <p>Construimos varios purificadores de aire tipo <strong>Corsi-Rosenthal</strong> usando distintos materiales filtrantes, medimos la reducción de PM2.5 con un sensor <strong>PMS5003</strong> conectado a <strong>Arduino</strong>, y calculamos cuál material ofrece la mejor relación costo-eficiencia. El proyecto se enmarca en el problema de las <strong>zonas de sacrificio</strong> de Chile, en particular Quintero-Puchuncaví, donde niños han sido intoxicados dentro de sus propias escuelas. Nuestra tesis: si mejoramos el aire en las salas, mejoramos la educación; si mejoramos la educación, mejoramos el futuro de Chile.</p>
+        </div>
+        <div class="card">
+          <h3>Progreso global de tareas</h3>
+          <div class="bar-track" style="height:14px;margin-bottom:6px;"><div class="bar-fill" id="mainProgressBar" style="height:14px;"></div></div>
+          <p id="mainProgressText" style="color:var(--muted);font-size:0.88rem;">Cargando...</p>
+          <p style="font-size:0.85rem;color:var(--muted);">Se calcula automáticamente según las tareas marcadas como completadas en la sección <strong>Tareas</strong>.</p>
+        </div>
+      </div>
+
+      <div class="card design-grid">
+        <h3>Diseño experimental</h3>
+        <div class="design-item">
+          <div class="k">Pregunta de investigación</div>
+          <div class="v">¿Qué material filtrante ofrece la mejor relación entre eficiencia de remoción de PM2.5 y costo, para purificar el aire en salas de clase de forma accesible?</div>
+        </div>
+        <div class="design-item">
+          <div class="k">Hipótesis</div>
+          <div class="v">Un purificador casero tipo Corsi-Rosenthal con filtro MERV-13 logrará una reducción de PM2.5 superior al 50%, a un costo significativamente menor que un filtro HEPA comercial.</div>
+        </div>
+        <div class="grid grid-3" style="margin-top:12px;">
+          <div class="design-item">
+            <div class="k">Variable independiente</div>
+            <div class="v">Tipo de material filtrante</div>
+          </div>
+          <div class="design-item">
+            <div class="k">Variable dependiente</div>
+            <div class="v">Concentración de PM2.5 (μg/m³)</div>
+          </div>
+          <div class="design-item">
+            <div class="k">Variables controladas</div>
+            <ul class="clean">
+              <li>Tamaño de la sala</li>
+              <li>Fuente de partículas</li>
+              <li>Caudal del ventilador</li>
+              <li>Tiempo de medición</li>
+              <li>Posición del sensor</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. GLOSARIO -->
+    <section id="glosario">
+      <div class="section-head"><span class="num">02</span><h2>Glosario</h2></div>
+      <p class="section-sub">Términos clave explicados de forma simple.</p>
+      <div class="grid grid-2" id="glosarioGrid"></div>
+    </section>
+
+    <!-- 3. MARCO TEORICO -->
+    <section id="marco-teorico">
+      <div class="section-head"><span class="num">03</span><h2>Marco teórico</h2></div>
+      <p class="section-sub">Evidencia científica que respalda el proyecto, organizada por tema.</p>
+
+      <div class="paper-group">
+        <h3>🎓 Aire y rendimiento escolar</h3>
+        <div class="grid grid-2" id="papersEdu"></div>
+      </div>
+
+      <div class="paper-group">
+        <h3>📦 Corsi-Rosenthal Box</h3>
+        <div class="grid grid-2" id="papersCR"></div>
+      </div>
+    </section>
+
+    <!-- 4. CASO QUINTERO -->
+    <section id="quintero">
+      <div class="section-head"><span class="num">04</span><h2>Caso Quintero-Puchuncaví</h2></div>
+
+      <div class="banner">
+        <h3>La zona de sacrificio en números</h3>
+        <div class="hero-stats">
+          <div class="stat-box"><div class="num">~50.000</div><div class="lbl">personas afectadas</div></div>
+          <div class="stat-box"><div class="num">10+</div><div class="lbl">intoxicaciones masivas registradas</div></div>
+          <div class="stat-box"><div class="num">15+</div><div class="lbl">empresas industriales en la zona</div></div>
+          <div class="stat-box"><div class="num">20+</div><div class="lbl">años de contaminación</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Línea de tiempo</h3>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-date">2011 — La Greda</div><p>Episodio de contaminación aguda que evidenció por primera vez a nivel nacional la gravedad de la situación en el sector La Greda, Puchuncaví.</p></div>
+          <div class="tl-item highlight"><div class="tl-date">2018 — Intoxicaciones masivas</div><p>Cientos de estudiantes y vecinos son hospitalizados por intoxicación en Quintero y Puchuncaví. Se instalan purificadores comerciales en algunas salas como única medida tangible.</p></div>
+          <div class="tl-item highlight"><div class="tl-date">Septiembre 2025 — 106 afectados</div><p>Nueva seguidilla de intoxicaciones masivas afecta a 106 personas en la zona.</p></div>
+          <div class="tl-item highlight"><div class="tl-date">Octubre 2025 — La Chocota</div><p>Nuevo episodio de contaminación reportado en el sector La Chocota, con estudiantes entre los afectados.</p></div>
+          <div class="tl-item"><div class="tl-date">2026 — Nuestro proyecto</div><p>Diseñamos y probamos purificadores caseros de bajo costo como alternativa accesible para salas de clase de la zona.</p></div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="ctitle">⚠️ Dato clave</div>
+        <p>Tras las intoxicaciones de 2018 y 2025, se instalaron purificadores <strong>comerciales</strong> —caros— en algunas salas de clase. Fue la única medida tangible tomada y aun así fue considerada <strong>insuficiente</strong> por las comunidades escolares. Hasta donde sabemos, <strong>nadie ha probado el enfoque Corsi-Rosenthal de bajo costo</strong> en zonas de sacrificio chilenas. Ese es nuestro aporte original.</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>No es solo un problema industrial</h3>
+          <p>En julio de 2025, Santiago fue la <strong>3ª ciudad más contaminada del mundo</strong>, con 161 μg/m³ de PM2.5 en su peor día, muy por encima de los 15 μg/m³ que recomienda la OMS como promedio anual.</p>
+        </div>
+        <div class="card">
+          <h3>Argumento central</h3>
+          <p>Los papers demuestran que filtros baratos mejoran las notas tanto como reducir el tamaño del curso en un tercio. En Quintero, los niños se intoxican dentro de sus propias escuelas. Nosotros demostramos que un filtro casero puede lograr resultados comparables a una fracción del costo de un purificador comercial.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. LIMITACIONES -->
+    <section id="limitaciones">
+      <div class="section-head"><span class="num">05</span><h2>Limitaciones y honestidad científica</h2></div>
+      <p class="section-sub">Ser honestos sobre lo que nuestro proyecto puede y no puede resolver.</p>
+
+      <div class="callout honest">
+        <div class="ctitle">🔍 Lo que reconocemos abiertamente</div>
+        <ul class="clean">
+          <li>El Corsi-Rosenthal Box con filtro MERV-13 filtra muy bien las <strong>partículas</strong> (PM2.5), pero <strong>no remueve gases</strong> como el SO2, que es parte de la contaminación de Quintero.</li>
+          <li>Agregar una capa de <strong>carbón activado</strong> podría mitigar parcialmente los VOCs, pero no es una solución total para gases.</li>
+          <li>Nuestro proyecto mide específicamente <strong>PM2.5</strong>, que sí es uno de los contaminantes principales y medibles con el equipo disponible. No pretendemos resolver toda la contaminación de la zona, sino demostrar que la parte de partículas se puede atacar de forma barata y accesible.</li>
+          <li>Creemos que esto nos hace ver honestos y rigurosos ante el jurado, lo cual es mejor que pretender que solucionamos todo el problema.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6. MATERIALES -->
+    <section id="materiales">
+      <div class="section-head"><span class="num">06</span><h2>Materiales y logística</h2></div>
+      <p class="section-sub">Haz click en el estado de cada material para actualizarlo. Se guarda automáticamente.</p>
+
+      <div class="banner" style="padding:16px 22px;">
+        <strong>Presupuesto estimado total: $40.000 – $80.000 CLP</strong>
+      </div>
+
+      <div id="materialesGroups"></div>
+    </section>
+
+    <!-- 7. DONDE COMPRAR -->
+    <section id="donde-comprar">
+      <div class="section-head"><span class="num">07</span><h2>Dónde comprar</h2></div>
+      <p class="section-sub">Tiendas chilenas y alternativas online para conseguir los materiales.</p>
+      <div class="grid grid-3" id="storesGrid"></div>
+    </section>
+
+    <!-- 8. CRONOGRAMA -->
+    <section id="cronograma">
+      <div class="section-head"><span class="num">08</span><h2>Cronograma</h2></div>
+      <p class="section-sub">Desde hoy (22 de agosto) hasta la presentación (9 de octubre de 2026). Incluye el receso de Fiestas Patrias.</p>
+      <div id="cronogramaList"></div>
+    </section>
+
+    <!-- 9. TAREAS -->
+    <section id="tareas">
+      <div class="section-head"><span class="num">09</span><h2>Tareas</h2></div>
+      <div class="task-toolbar">
+        <span class="task-stats" id="taskStats">Cargando...</span>
+      </div>
+
+      <div class="add-task-form">
+        <input type="text" id="newTaskText" placeholder="Nueva tarea...">
+        <select id="newTaskPhase">
+          <option value="Fase 1 — Preparación">Fase 1 — Preparación</option>
+          <option value="Fase 2 — Construcción">Fase 2 — Construcción</option>
+          <option value="Fase 3 — Mediciones">Fase 3 — Mediciones</option>
+          <option value="Fase 4 — Análisis y presentación">Fase 4 — Análisis y presentación</option>
+        </select>
+        <select id="newTaskAssignee">
+          <option value="Mateo">Mateo</option>
+          <option value="Skalweit">Skalweit</option>
+          <option value="Ambos">Ambos</option>
+        </select>
+        <button class="btn" id="addTaskBtn">+ Agregar tarea</button>
+      </div>
+
+      <div id="tasksContainer"></div>
+    </section>
+
+    <!-- 10. BITACORA -->
+    <section id="bitacora">
+      <div class="section-head"><span class="num">10</span><h2>Bitácora / Log</h2></div>
+      <p class="section-sub">Registro de avances día a día.</p>
+
+      <div class="log-form">
+        <input type="date" id="logDate">
+        <select id="logAuthor">
+          <option value="Mateo">Mateo</option>
+          <option value="Skalweit">Skalweit</option>
+        </select>
+        <textarea id="logText" placeholder="¿Qué se hizo hoy?"></textarea>
+        <button class="btn" id="addLogBtn">+ Agregar entrada</button>
+      </div>
+
+      <div id="logContainer"></div>
+    </section>
+
+    <!-- 11. CONTACTOS -->
+    <section id="contactos">
+      <div class="section-head"><span class="num">11</span><h2>Contactos</h2></div>
+      <p class="section-sub">Datos de contacto de referentes del colegio. Editable — se guarda automáticamente.</p>
+      <div class="grid grid-2" id="contactsGrid"></div>
+    </section>
+
+    <!-- 12. REFERENCIAS -->
+    <section id="referencias">
+      <div class="section-head"><span class="num">12</span><h2>Referencias</h2></div>
+      <div class="table-wrap card">
+        <table>
+          <thead>
+            <tr><th>Autor / Año</th><th>Hallazgo clave</th><th>Fuente / Journal</th><th>Link</th></tr>
+          </thead>
+          <tbody id="referenciasBody"></tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:26px;">Links útiles</h3>
+      <div class="grid grid-2" id="usefulLinksGrid"></div>
+    </section>
+
+    <!-- 13. SETUP EXPERIMENTAL -->
+    <section id="setup">
+      <div class="section-head"><span class="num">13</span><h2>Setup experimental</h2></div>
+      <p class="section-sub">Cómo se hace el experimento, paso a paso.</p>
+
+      <div class="grid grid-2">
+        <div class="card setup-card">
+          <h4><span class="opt-tag">Opción A</span> En sala real (más realista)</h4>
+          <ol>
+            <li>Cerrar una sala del colegio (puertas y ventanas cerradas).</li>
+            <li>Colocar el sensor PMS5003 en el centro de la sala, a ~1 metro del suelo.</li>
+            <li>Encender un incienso para generar partículas (simula contaminación).</li>
+            <li>Esperar hasta que el sensor marque un nivel alto estable (~150+ μg/m³).</li>
+            <li>Apagar el incienso.</li>
+            <li>Encender el purificador con el filtro que se esté probando.</li>
+            <li>Registrar cómo baja el PM2.5 cada 1 minuto durante 30-60 minutos.</li>
+            <li>Repetir con cada filtro distinto, siempre empezando del mismo nivel base.</li>
+            <li>Cada filtro se prueba mínimo 3 veces, para que los datos sean confiables.</li>
+          </ol>
+        </div>
+        <div class="card setup-card">
+          <h4><span class="opt-tag">Opción B</span> En caja controlada (más fácil de repetir)</h4>
+          <ol>
+            <li>Usar un contenedor transparente grande (~60-80 litros).</li>
+            <li>Colocar el sensor adentro y el purificador mini encima.</li>
+            <li>Usar incienso como fuente de humo.</li>
+            <li>Seguir el mismo proceso de medición, pero en volumen controlado.</li>
+          </ol>
+          <p style="font-size:0.88rem;color:var(--muted);margin-top:10px;">Ventaja: siempre el mismo espacio = datos más comparables. Además es más fácil de demostrar en vivo durante la feria.</p>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="ctitle">🕯️ ¿Por qué usamos incienso?</div>
+        <p>El humo de incienso genera PM2.5 con metales, hidrocarburos y partículas finas similares a las de la combustión industrial. Un incienso eleva el PM2.5 a aproximadamente <strong>197 μg/m³</strong>, muy cercano a los <strong>161 μg/m³</strong> que registró Santiago en su peor día de 2025. Es la fuente estándar usada en estudios publicados para testear filtros.</p>
+      </div>
+
+      <div class="callout honest">
+        <div class="ctitle">🔍 Honestidad</div>
+        <p>El incienso simula bien las partículas, pero <strong>no simula los gases</strong> como el SO2 de Quintero. Nuestro experimento mide filtración de partículas específicamente, que es lo que los papers vinculan directamente con el rendimiento escolar.</p>
+      </div>
+    </section>
+
+    <!-- 14. ANTECEDENTES QUINTERO -->
+    <section id="antecedentes">
+      <div class="section-head"><span class="num">14</span><h2>Antecedentes en Quintero</h2></div>
+      <div class="card">
+        <ul class="clean" style="font-size:0.95rem;">
+          <li>Tras las intoxicaciones masivas de 2018, la <strong>única medida tangible</strong> fue la instalación de purificadores de aire <strong>comerciales</strong> en algunas salas de los colegios de Quintero y Puchuncaví. Fue considerada insuficiente por las comunidades escolares.</li>
+          <li>En 2025, tras una nueva seguidilla de intoxicaciones (106 afectados en septiembre, 8 alumnos en octubre), se reforzaron los purificadores existentes y los protocolos de emergencia.</li>
+          <li>En 2026, al volver a clases, las comunidades escolares reportaron que muchas salas <strong>aún no tienen purificadores</strong>, y los que sí tienen son comerciales y caros.</li>
+          <li><strong>Nadie ha probado el enfoque Corsi-Rosenthal</strong> (casero, barato) en zonas de sacrificio chilenas.</li>
+          <li>Nuestro aporte original es demostrar que se puede lograr una filtración comparable a un costo accesible para cualquier colegio, no solo los que puedan pagar equipos comerciales.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 15. PRESUPUESTO -->
+    <section id="presupuesto">
+      <div class="section-head"><span class="num">15</span><h2>Presupuesto</h2></div>
+      <p class="section-sub">Tracker de gastos reales vs. estimados. Editable — se guarda automáticamente.</p>
+
+      <div class="add-task-form" style="margin-bottom:18px;">
+        <input type="text" id="newBudgetItem" placeholder="Nombre del item...">
+        <input type="text" id="newBudgetEst" placeholder="Precio estimado (ej: 10000)" style="max-width:180px;padding:9px 12px;border:1px solid var(--card-border);border-radius:8px;">
+        <button class="btn" id="addBudgetBtn">+ Agregar item</button>
+      </div>
+
+      <div class="table-wrap card">
+        <table>
+          <thead>
+            <tr><th>Item</th><th>Precio estimado</th><th>Precio real</th><th>Pagado por</th><th>Estado</th><th></th></tr>
+          </thead>
+          <tbody id="budgetBody"></tbody>
+        </table>
+      </div>
+
+      <div class="budget-summary" id="budgetSummary"></div>
+    </section>
+
+    <footer class="page-footer">
+      Aire limpio para aprender · Feria Científica 2026 · Mateo Berger &amp; Skalweit
+    </footer>
+
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Utilidades de almacenamiento ---------- */
+const LS = {
+  tasks:'fc_tasks_v1',
+  log:'fc_log_v1',
+  materials:'fc_materials_v1',
+  budget:'fc_budget_v1',
+  contacts:'fc_contacts_v1'
+};
+function load(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+    return JSON.parse(raw);
+  }catch(e){ return fallback; }
+}
+function save(key, value){
+  localStorage.setItem(key, JSON.stringify(value));
+}
+function clp(n){
+  n = Number(n)||0;
+  return '$' + n.toLocaleString('es-CL');
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+/* ---------- Sidebar / navegación ---------- */
+const sidebar = document.getElementById('sidebar');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const overlay = document.getElementById('overlay');
+hamburgerBtn.addEventListener('click', ()=>{
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+});
+overlay.addEventListener('click', ()=>{
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+});
+const navButtons = Array.from(document.querySelectorAll('#navlist button'));
+navButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = document.getElementById(btn.dataset.target);
+    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+  });
+});
+const sections = navButtons.map(b=>document.getElementById(b.dataset.target)).filter(Boolean);
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const id = entry.target.id;
+      navButtons.forEach(b=>b.classList.toggle('active', b.dataset.target===id));
+    }
+  });
+}, {rootMargin:'-15% 0px -70% 0px', threshold:0});
+sections.forEach(s=>io.observe(s));
+
+/* ---------- Countdown ---------- */
+const TARGET_DATE = new Date('2026-10-09T08:30:00');
+function updateCountdown(){
+  const now = new Date();
+  let diff = TARGET_DATE - now;
+  if(diff < 0) diff = 0;
+  const days = Math.floor(diff/(1000*60*60*24));
+  const hours = Math.floor((diff/(1000*60*60))%24);
+  const mins = Math.floor((diff/(1000*60))%60);
+  const secs = Math.floor((diff/1000)%60);
+  document.getElementById('cdDays').textContent = days;
+  document.getElementById('cdHours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cdMins').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cdSecs').textContent = String(secs).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ---------- GLOSARIO ---------- */
+const GLOSARIO = [
+  {t:'PM2.5', d:'Partículas en el aire tan pequeñas (2.5 micrómetros) que pueden entrar a tus pulmones y hasta a tu sangre. Para dimensionar: un pelo humano tiene ~70 μm de diámetro, así que el PM2.5 es 28 veces más pequeño.'},
+  {t:'PM10', d:'Partículas de hasta 10 μm de diámetro. Son más grandes que el PM2.5, pero igual de dañinas para las vías respiratorias.'},
+  {t:'HEPA', d:'High Efficiency Particulate Air. Un filtro que atrapa el 99.97% de las partículas de 0.3 μm o más. Es el estándar dorado de filtración, pero es caro.'},
+  {t:'MERV-13', d:'Minimum Efficiency Reporting Value. Una escala del 1 al 16 que mide qué tan bien un filtro atrapa partículas. El MERV-13 atrapa entre el 50-90% de las partículas de 0.3-10 μm. Tiene muy buena relación calidad/precio.'},
+  {t:'Corsi-Rosenthal Box', d:'Un purificador de aire casero inventado en 2020 por los ingenieros Richard Corsi y Jim Rosenthal. Se arma con un ventilador de caja + 4 filtros MERV-13 formando un cubo + cartón + cinta. Cuesta 5-10 veces menos que un purificador comercial y rinde casi igual.'},
+  {t:'PMS5003', d:'Sensor láser digital que mide la concentración de partículas PM1.0, PM2.5 y PM10 en el aire. Se conecta a un Arduino por UART.'},
+  {t:'Arduino', d:'Placa electrónica programable que usamos para leer el sensor y registrar los datos.'},
+  {t:'μg/m³', d:'Microgramos por metro cúbico. Es la unidad para medir cuánta contaminación hay en el aire. La OMS recomienda un máximo de 15 μg/m³ de PM2.5 como promedio anual.'},
+  {t:'Zona de sacrificio', d:'Territorio donde la actividad industrial ha degradado el medio ambiente y la salud de sus habitantes de forma desproporcionada. En Chile: Quintero-Puchuncaví, Coronel, Mejillones, Tocopilla, Huasco.'},
+  {t:'Carbón activado', d:'Material poroso que absorbe gases, olores y compuestos orgánicos volátiles (VOCs). No atrapa partículas sólidas; es complementario al MERV-13/HEPA.'},
+  {t:'VOC (Compuestos Orgánicos Volátiles)', d:'Químicos que se evaporan fácilmente y contaminan el aire. Están presentes en pinturas, limpiadores y humo industrial. En Quintero se han detectado tolueno, metilcloroformo y nitrobenceno.'},
+  {t:'SO2 (Dióxido de azufre)', d:'Gas tóxico que sale de las chimeneas de industrias. Irrita los pulmones y causa problemas respiratorios. Los filtros de partículas NO lo atrapan.'},
+  {t:'Filtración mecánica', d:'Atrapar partículas físicamente en las fibras del filtro cuando el aire pasa a través de él. Más fibras y más densas = más partículas atrapadas.'},
+  {t:'Carga electrostática', d:'Algunos materiales (lana, poliéster) tienen carga eléctrica natural que atrae partículas del aire como un imán, además de la filtración mecánica normal.'}
+];
+const glosarioGrid = document.getElementById('glosarioGrid');
+GLOSARIO.forEach(g=>{
+  const div = document.createElement('div');
+  div.className = 'card term-card';
+  div.innerHTML = `<div class="term">${g.t}</div><p>${g.d}</p>`;
+  glosarioGrid.appendChild(div);
+});
+
+/* ---------- MARCO TEORICO ---------- */
+const PAPERS_EDU = [
+  {a:'Gilraine (2023)', j:'Journal of Human Resources', f:'Filtros de aire en salas de clase mejoran los puntajes académicos entre 0.1 y 0.2 desviaciones estándar (SD), equivalente a reducir el tamaño del curso en un tercio.'},
+  {a:'Heissel et al. (2022)', j:'ScienceDirect', f:'La exposición a PM2.5 reduce el rendimiento académico en aproximadamente un 7.5% de una SD.'},
+  {a:'Mendell et al. (2021)', j:'Science of the Total Environment', f:'Cada aumento de +1 μg/m³ de PM2.5 se asocia a +7.37 días de ausencia escolar al año.'},
+  {a:'Camfil Report', j:'Reporte técnico, California', f:'El uso de filtración HEPA en salas de clase puede reducir el ausentismo estudiantil hasta en un 50%.'},
+  {a:'UNESCO / SIMA (2020)', j:'PMC', f:'El 85% de los estudiantes europeos asiste a colegios que superan los límites de contaminación recomendados por la OMS.'}
+];
+const PAPERS_CR = [
+  {a:'Gasparrini et al. (2022)', j:'ChemRxiv', f:'Un Corsi-Rosenthal Box reduce el PM2.5 entre un 56% y un 91% en salas ocupadas.'},
+  {a:'EPA (Agencia de Protección Ambiental, EE.UU.)', j:'Reporte técnico', f:'Los filtros DIY (Corsi-Rosenthal) son comparables en desempeño a purificadores comerciales 5-10 veces más caros.'},
+  {a:'UC Davis', j:'Estudio universitario', f:'Un Corsi-Rosenthal Box reduce el PM2.5 entre un 40% y un 60% en una habitación de tamaño típico.'},
+  {a:'Brown University / Nature (2023)', j:'Nature', f:'Los Corsi-Rosenthal Box también reducen VOCs, SVOCs, PFAS y ftalatos en el aire, no solo partículas.'},
+  {a:'Environmental Science & Technology (2022)', j:'Environmental Science & Technology', f:'Los Corsi-Rosenthal Box reducen PFAS entre un 28% y un 61%, y ftalatos entre un 29% y un 62%.'}
+];
+function paperCard(p, cls){
+  const div = document.createElement('div');
+  div.className = 'card paper-card ' + (cls||'');
+  div.innerHTML = `<div class="author">${p.a}</div><div class="journal">${p.j}</div><p class="finding">${p.f}</p>`;
+  return div;
+}
+const papersEduEl = document.getElementById('papersEdu');
+PAPERS_EDU.forEach(p=>papersEduEl.appendChild(paperCard(p)));
+const papersCREl = document.getElementById('papersCR');
+PAPERS_CR.forEach(p=>papersCREl.appendChild(paperCard(p,'cr')));
+
+/* ---------- REFERENCIAS (tabla) ---------- */
+const ALL_PAPERS = [
+  {a:'Gilraine (2023)', f:'Filtros en salas mejoran puntajes 0.1-0.2 SD, equivalente a reducir el curso en un tercio.', j:'Journal of Human Resources'},
+  {a:'Heissel et al. (2022)', f:'PM2.5 reduce el rendimiento académico ~7.5% SD.', j:'ScienceDirect'},
+  {a:'Mendell et al. (2021)', f:'+1 μg/m³ de PM2.5 = +7.37 días de ausencia escolar al año.', j:'Science of the Total Environment'},
+  {a:'Camfil Report', f:'HEPA reduce el ausentismo escolar hasta un 50%.', j:'Reporte técnico, California'},
+  {a:'UNESCO / SIMA (2020)', f:'85% de estudiantes europeos en colegios sobre los límites OMS.', j:'PMC'},
+  {a:'Gasparrini et al. (2022)', f:'Corsi-Rosenthal Box reduce PM2.5 56-91% en salas ocupadas.', j:'ChemRxiv'},
+  {a:'EPA', f:'Filtros DIY comparables a comerciales 5-10x más caros.', j:'Reporte técnico'},
+  {a:'UC Davis', f:'Corsi-Rosenthal Box reduce PM2.5 40-60% en habitación típica.', j:'Estudio universitario'},
+  {a:'Brown University / Nature (2023)', f:'CR Box también reduce VOCs, SVOCs, PFAS y ftalatos.', j:'Nature'},
+  {a:'Environmental Science & Technology (2022)', f:'CR Box reduce PFAS 28-61% y ftalatos 29-62%.', j:'Environmental Science & Technology'}
+];
+const refBody = document.getElementById('referenciasBody');
+ALL_PAPERS.forEach(p=>{
+  const tr = document.createElement('tr');
+  const q = encodeURIComponent(p.a + ' ' + p.j);
+  tr.innerHTML = `<td>${p.a}</td><td>${p.f}</td><td>${p.j}</td><td><a href="https://scholar.google.com/scholar?q=${q}" target="_blank" rel="noopener">Buscar en Scholar ↗</a></td>`;
+  refBody.appendChild(tr);
+});
+
+const USEFUL_LINKS = [
+  {name:'Google Scholar — búsqueda de papers', desc:'Motor de búsqueda académica para profundizar en cada estudio citado.', url:'https://scholar.google.com/scholar?q=' + encodeURIComponent('Corsi-Rosenthal box PM2.5 school performance')},
+  {name:'Guía de construcción Corsi-Rosenthal', desc:'Búsqueda de guías paso a paso para armar el purificador casero.', url:'https://www.google.com/search?q=' + encodeURIComponent('cómo construir Corsi-Rosenthal box filtro MERV-13 guía')}
+];
+const usefulLinksGrid = document.getElementById('usefulLinksGrid');
+USEFUL_LINKS.forEach(l=>{
+  const div = document.createElement('div');
+  div.className = 'card store-card';
+  div.innerHTML = `<div class="name">${l.name}</div><p style="font-size:0.88rem;color:var(--muted);margin:0;">${l.desc}</p><a class="btn-link" href="${l.url}" target="_blank" rel="noopener">Abrir ↗</a>`;
+  usefulLinksGrid.appendChild(div);
+});
+
+/* ---------- CASO / QUINTERO ya está en HTML estático ---------- */
+
+/* ---------- MATERIALES (sección 6) ---------- */
+const MATERIALES_DEFAULT = {
+  'Electrónica':[
+    {id:'m1', name:'Sensor PMS5003', desc:'Sensor láser de partículas PM1.0/PM2.5/PM10', price:'$5.000 - $15.000'},
+    {id:'m2', name:'Arduino UNO / Nano', desc:'Placa controladora para leer el sensor', price:'$5.000 - $10.000'},
+    {id:'m3', name:'Cables jumper', desc:'Para conectar sensor y Arduino', price:'$1.000 - $2.000'},
+    {id:'m4', name:'Display LCD/OLED (opcional)', desc:'Para mostrar lecturas en vivo', price:'$3.000 - $6.000'}
+  ],
+  'Estructura':[
+    {id:'m5', name:'Ventilador de caja 20"', desc:'Motor del purificador Corsi-Rosenthal', price:'$8.000 - $15.000'},
+    {id:'m6', name:'Cartón grueso', desc:'Base y tapa del cubo filtrante', price:'$0 - $2.000'},
+    {id:'m7', name:'Cinta adhesiva / duct tape', desc:'Para sellar el cubo y evitar fugas de aire', price:'$2.000 - $4.000'}
+  ],
+  'Filtros a comparar':[
+    {id:'m8', name:'Filtro MERV-13', desc:'Filtro principal a evaluar (hipótesis)', price:'$15.000 - $30.000'},
+    {id:'m9', name:'Filtro HEPA', desc:'Referencia de alto estándar', price:'$20.000 - $50.000'},
+    {id:'m10', name:'Carbón activado', desc:'Complemento para VOCs (no filtra partículas)', price:'$5.000 - $12.000'},
+    {id:'m11', name:'Algodón alta densidad', desc:'Material filtrante casero', price:'$2.000 - $5.000'},
+    {id:'m12', name:'Franela', desc:'Material filtrante casero', price:'$1.000 - $3.000'},
+    {id:'m13', name:'Poliéster / algodón', desc:'Material filtrante casero', price:'$1.000 - $3.000'},
+    {id:'m14', name:'Lana', desc:'Material filtrante casero con carga electrostática natural', price:'$2.000 - $5.000'},
+    {id:'m15', name:'Tela no tejida quirúrgica', desc:'Material filtrante casero', price:'$1.000 - $2.000'},
+    {id:'m16', name:'Multicapa (combinaciones)', desc:'Combinación de materiales anteriores', price:'Variable'}
+  ],
+  'Otros':[
+    {id:'m17', name:'Incienso', desc:'Fuente controlada de PM2.5 para las pruebas', price:'$1.000 - $2.000'},
+    {id:'m18', name:'Cartulinas / poster digital', desc:'Material de presentación (el poster será digital)', price:'$0'}
+  ]
+};
+const STATUS_OPTIONS = ['Por comprar','Verificar','Comprado','Listo'];
+function statusClass(s){
+  return 'status-' + s.toLowerCase().replace(/\s+/g,'-').normalize('NFD').replace(/[̀-ͯ]/g,'');
+}
+let materialsState = load(LS.materials, null);
+if(!materialsState){
+  materialsState = {};
+  Object.values(MATERIALES_DEFAULT).flat().forEach(m=>{ materialsState[m.id] = 'Por comprar'; });
+  save(LS.materials, materialsState);
+}
+function renderMateriales(){
+  const container = document.getElementById('materialesGroups');
+  container.innerHTML = '';
+  Object.entries(MATERIALES_DEFAULT).forEach(([group, items])=>{
+    const wrap = document.createElement('div');
+    wrap.style.marginBottom = '22px';
+    const title = document.createElement('h3');
+    title.style.cssText = 'color:var(--primary);font-size:1.05rem;margin-bottom:10px;';
+    title.textContent = group;
+    wrap.appendChild(title);
+    const tableWrap = document.createElement('div');
+    tableWrap.className = 'table-wrap card';
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr><th>Material</th><th>Descripción</th><th>Precio estimado</th><th>Estado</th></tr></thead>`;
+    const tbody = document.createElement('tbody');
+    items.forEach(item=>{
+      const status = materialsState[item.id] || 'Por comprar';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><strong>${item.name}</strong></td><td>${item.desc}</td><td>${item.price}</td><td></td>`;
+      const statusCell = tr.children[3];
+      const select = document.createElement('select');
+      select.className = 'status-select';
+      STATUS_OPTIONS.forEach(opt=>{
+        const o = document.createElement('option');
+        o.value = opt; o.textContent = opt;
+        if(opt===status) o.selected = true;
+        select.appendChild(o);
+      });
+      select.addEventListener('change', ()=>{
+        materialsState[item.id] = select.value;
+        save(LS.materials, materialsState);
+      });
+      statusCell.appendChild(select);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    tableWrap.appendChild(table);
+    wrap.appendChild(tableWrap);
+    container.appendChild(wrap);
+  });
+}
+renderMateriales();
+
+/* ---------- DONDE COMPRAR ---------- */
+const STORES = [
+  {name:'MechatronicStore', desc:'Arduino, sensores y componentes electrónicos.', url:'https://www.mechatronicstore.cl'},
+  {name:'Altronics', desc:'Electrónica en general, retiro en San Miguel.', url:'https://www.altronics.cl'},
+  {name:'Geek Factory', desc:'Arduino y módulos electrónicos.', url:'https://www.geekfactory.cl'},
+  {name:'Labtroniks', desc:'Sensores y componentes.', url:'https://www.labtroniks.cl'},
+  {name:'Triacs', desc:'Arduino y cables.', url:'https://www.triacs.cl'},
+  {name:'MaxElectrónica', desc:'Tienda de electrónica en Valparaíso.', url:'https://www.maxelectronica.cl'},
+  {name:'MercadoLibre Chile', desc:'Buscar "PMS5003" o "sensor PM2.5".', url:'https://www.mercadolibre.cl'},
+  {name:'AliExpress', desc:'Más barato, pero 2-3 semanas de envío: ¡pedir YA!', url:'https://www.aliexpress.com', warn:true},
+  {name:'Shopee Chile', desc:'Alternativa online con despacho rápido.', url:'https://shopee.cl'},
+  {name:'Anwo', desc:'Filtros MERV-13 industriales.', url:'https://www.anwo.cl'},
+  {name:'Sodimac', desc:'Ventiladores, telas y materiales de construcción.', url:'https://www.sodimac.cl'},
+  {name:'Falabella', desc:'Referencia de precios de purificadores comerciales para comparar.', url:'https://www.falabella.com'}
+];
+const storesGrid = document.getElementById('storesGrid');
+STORES.forEach(s=>{
+  const div = document.createElement('div');
+  div.className = 'card store-card';
+  div.innerHTML = `<div class="name">${s.name}</div><p style="font-size:0.88rem;color:var(--muted);margin:0;">${s.desc}</p>${s.warn?'<p class="note">⏱ Pedir con anticipación</p>':''}<a class="btn-link" href="${s.url}" target="_blank" rel="noopener">Visitar ↗</a>`;
+  storesGrid.appendChild(div);
+});
+
+/* ---------- CRONOGRAMA ---------- */
+const CRONOGRAMA = [
+  {title:'Semana 1', dates:'22 - 25 de agosto', items:['Comprar sensor PMS5003 y Arduino','Definir protocolo de medición','Meta: tener todos los materiales clave'], deadline:'DEADLINE: 26 de agosto para cerrar logística e investigación'},
+  {title:'Semana 2', dates:'26 de agosto - 1 de septiembre', items:['Programar Arduino + sensor','Construir primer prototipo','Pruebas piloto']},
+  {title:'Semana 3', dates:'2 - 8 de septiembre', items:['Construir purificadores con todos los filtros','Estandarizar condiciones de prueba']},
+  {title:'Semana 4', dates:'9 - 13 de septiembre', items:['MEDICIONES — semana clave antes del receso','Probar cada filtro, mínimo 3 repeticiones'], milestone:true},
+  {title:'Receso — Fiestas Patrias', dates:'14 - 20 de septiembre', items:['No hay clases (14 al 19)','Retorno a clases: lunes 21 de septiembre','Tiempo libre para avanzar análisis o descansar'], receso:true},
+  {title:'Semana 5', dates:'21 - 27 de septiembre', items:['Análisis de datos','Gráficos comparativos','Cálculo de costo-eficiencia']},
+  {title:'Semana 6', dates:'28 de septiembre - 4 de octubre', items:['Redactar informe','Propuesta de implementación para Quintero','Diseñar poster digital']},
+  {title:'Semana 7', dates:'5 - 8 de octubre', items:['Ajustes finales','Ensayo general']},
+  {title:'9 de octubre', dates:'Día de la presentación', items:['¡Presentación final del proyecto!'], milestone:true}
+];
+const cronogramaList = document.getElementById('cronogramaList');
+CRONOGRAMA.forEach(w=>{
+  const div = document.createElement('div');
+  div.className = 'card week-card' + (w.receso?' receso':'') + (w.milestone?' milestone':'');
+  div.style.marginBottom = '12px';
+  div.innerHTML = `
+    <div class="wk-title"><span>${w.title}</span><span class="wk-dates">${w.dates}</span></div>
+    <ul>${w.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    ${w.deadline?`<div style="margin-top:10px;"><span class="tag-deadline">${w.deadline}</span></div>`:''}
+  `;
+  cronogramaList.appendChild(div);
+});
+
+/* ---------- TAREAS ---------- */
+const TASKS_DEFAULT = [
+  {phase:'Fase 1 — Preparación', text:'Comprar sensor PMS5003', assignee:'Ambos'},
+  {phase:'Fase 1 — Preparación', text:'Verificar si tenemos Arduino', assignee:'Mateo'},
+  {phase:'Fase 1 — Preparación', text:'Comprar materiales filtrantes', assignee:'Skalweit'},
+  {phase:'Fase 1 — Preparación', text:'Comprar ventilador de caja', assignee:'Skalweit'},
+  {phase:'Fase 1 — Preparación', text:'Programar Arduino para leer sensor', assignee:'Mateo'},
+  {phase:'Fase 1 — Preparación', text:'Redactar protocolo de medición', assignee:'Ambos'},
+  {phase:'Fase 2 — Construcción', text:'Construir primer prototipo CR Box', assignee:'Mateo'},
+  {phase:'Fase 2 — Construcción', text:'Prueba piloto con sensor', assignee:'Mateo'},
+  {phase:'Fase 2 — Construcción', text:'Preparar todos los filtros', assignee:'Skalweit'},
+  {phase:'Fase 2 — Construcción', text:'Conseguir sala del colegio para mediciones', assignee:'Skalweit'},
+  {phase:'Fase 3 — Mediciones', text:'Medir PM2.5 sin filtro (línea base)', assignee:'Mateo'},
+  {phase:'Fase 3 — Mediciones', text:'Medir con filtro MERV-13 (3 repeticiones)', assignee:'Mateo'},
+  {phase:'Fase 3 — Mediciones', text:'Medir con filtro HEPA (3 repeticiones)', assignee:'Mateo'},
+  {phase:'Fase 3 — Mediciones', text:'Medir con filtros caseros (3 rep. c/u)', assignee:'Mateo'},
+  {phase:'Fase 3 — Mediciones', text:'Registrar costos reales de cada filtro', assignee:'Skalweit'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Calcular % reducción y costo-eficiencia', assignee:'Ambos'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Crear gráficos comparativos', assignee:'Skalweit'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Redactar informe', assignee:'Skalweit'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Propuesta de costo por sala para Quintero', assignee:'Ambos'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Diseñar poster digital', assignee:'Skalweit'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Preparar demo en vivo (sensor midiendo)', assignee:'Mateo'},
+  {phase:'Fase 4 — Análisis y presentación', text:'Ensayo general', assignee:'Ambos'}
+];
+let tasks = load(LS.tasks, null);
+if(!tasks){
+  tasks = TASKS_DEFAULT.map(t=>({id:uid(), ...t, done:false}));
+  save(LS.tasks, tasks);
+}
+const PHASES = ['Fase 1 — Preparación','Fase 2 — Construcción','Fase 3 — Mediciones','Fase 4 — Análisis y presentación'];
+function assigneeClass(a){
+  if(a==='Mateo') return 'mateo';
+  if(a==='Skalweit') return 'skalweit';
+  return 'ambos';
+}
+function renderTasks(){
+  const container = document.getElementById('tasksContainer');
+  container.innerHTML = '';
+  PHASES.forEach(phase=>{
+    const phaseTasks = tasks.filter(t=>t.phase===phase);
+    if(phaseTasks.length===0) return;
+    const block = document.createElement('div');
+    block.className = 'phase-block';
+    const doneCount = phaseTasks.filter(t=>t.done).length;
+    block.innerHTML = `<h3>${phase} <span class="count">${doneCount}/${phaseTasks.length}</span></h3>`;
+    phaseTasks.forEach(t=>{
+      const row = document.createElement('div');
+      row.className = 'task-row assign-' + assigneeClass(t.assignee) + (t.done?' done':'');
+
+      const checkbox = document.createElement('input');
+      checkbox.type='checkbox';
+      checkbox.checked = t.done;
+      checkbox.addEventListener('change', ()=>{
+        t.done = checkbox.checked;
+        save(LS.tasks, tasks);
+        renderTasks();
+        updateProgress();
+      });
+
+      const textSpan = document.createElement('span');
+      textSpan.className = 'task-text';
+      textSpan.textContent = t.text;
+
+      const select = document.createElement('select');
+      select.className = 'assignee-select';
+      ['Mateo','Skalweit','Ambos'].forEach(opt=>{
+        const o = document.createElement('option');
+        o.value = opt; o.textContent = opt;
+        if(opt===t.assignee) o.selected = true;
+        select.appendChild(o);
+      });
+      select.addEventListener('change', ()=>{
+        t.assignee = select.value;
+        save(LS.tasks, tasks);
+        renderTasks();
+      });
+
+      const pill = document.createElement('span');
+      pill.className = 'assignee-pill ' + (t.assignee==='Mateo'?'mateo':t.assignee==='Skalweit'?'skalweit':'ambos');
+      pill.textContent = t.assignee;
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'del-btn';
+      delBtn.innerHTML = '✕';
+      delBtn.title = 'Eliminar tarea';
+      delBtn.addEventListener('click', ()=>{
+        tasks = tasks.filter(x=>x.id!==t.id);
+        save(LS.tasks, tasks);
+        renderTasks();
+        updateProgress();
+      });
+
+      row.appendChild(checkbox);
+      row.appendChild(textSpan);
+      row.appendChild(pill);
+      row.appendChild(select);
+      row.appendChild(delBtn);
+      block.appendChild(row);
+    });
+    container.appendChild(block);
+  });
+
+  const total = tasks.length;
+  const done = tasks.filter(t=>t.done).length;
+  document.getElementById('taskStats').textContent = `${done} de ${total} tareas completadas`;
+}
+document.getElementById('addTaskBtn').addEventListener('click', ()=>{
+  const textEl = document.getElementById('newTaskText');
+  const text = textEl.value.trim();
+  if(!text) return;
+  const phase = document.getElementById('newTaskPhase').value;
+  const assignee = document.getElementById('newTaskAssignee').value;
+  tasks.push({id:uid(), phase, text, assignee, done:false});
+  save(LS.tasks, tasks);
+  textEl.value = '';
+  renderTasks();
+  updateProgress();
+});
+document.getElementById('newTaskText').addEventListener('keydown', e=>{
+  if(e.key==='Enter') document.getElementById('addTaskBtn').click();
+});
+
+/* ---------- PROGRESO GLOBAL ---------- */
+function updateProgress(){
+  const total = tasks.length;
+  const done = tasks.filter(t=>t.done).length;
+  const pct = total>0 ? Math.round((done/total)*100) : 0;
+  document.getElementById('sidebarProgressBar').style.width = pct+'%';
+  document.getElementById('sidebarProgressPct').textContent = pct+'%';
+  document.getElementById('mainProgressBar').style.width = pct+'%';
+  document.getElementById('mainProgressText').textContent = `${done} de ${total} tareas completadas (${pct}%)`;
+}
+
+/* ---------- BITACORA ---------- */
+let logEntries = load(LS.log, []);
+function renderLog(){
+  const container = document.getElementById('logContainer');
+  container.innerHTML = '';
+  if(logEntries.length===0){
+    container.innerHTML = '<p class="empty-state">Aún no hay entradas en la bitácora. ¡Agrega la primera!</p>';
+    return;
+  }
+  const sorted = [...logEntries].sort((a,b)=> b.date.localeCompare(a.date) || b.createdAt-a.createdAt);
+  sorted.forEach(entry=>{
+    const div = document.createElement('div');
+    div.className = 'card log-entry' + (entry.author==='Skalweit' ? ' author-skalweit':'');
+    const dateFmt = new Date(entry.date+'T00:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
+    div.innerHTML = `
+      <div class="log-head">
+        <span class="assignee-pill ${entry.author==='Skalweit'?'skalweit':'mateo'}">${entry.author}</span>
+        <span class="log-date">${dateFmt}</span>
+      </div>
+      <p></p>
+    `;
+    div.querySelector('p').textContent = entry.text;
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.innerHTML = '✕ eliminar';
+    delBtn.style.marginTop = '8px';
+    delBtn.style.fontSize = '0.75rem';
+    delBtn.addEventListener('click', ()=>{
+      logEntries = logEntries.filter(e=>e.id!==entry.id);
+      save(LS.log, logEntries);
+      renderLog();
+    });
+    div.appendChild(delBtn);
+    container.appendChild(div);
+  });
+}
+document.getElementById('logDate').valueAsDate = new Date();
+document.getElementById('addLogBtn').addEventListener('click', ()=>{
+  const date = document.getElementById('logDate').value || new Date().toISOString().slice(0,10);
+  const author = document.getElementById('logAuthor').value;
+  const textEl = document.getElementById('logText');
+  const text = textEl.value.trim();
+  if(!text) return;
+  logEntries.push({id:uid(), date, author, text, createdAt:Date.now()});
+  save(LS.log, logEntries);
+  textEl.value = '';
+  renderLog();
+});
+renderLog();
+
+/* ---------- CONTACTOS ---------- */
+const CONTACTS_DEFAULT = [
+  {id:'c1', role:'Profesor(a) de Química', name:'', email:''},
+  {id:'c2', role:'Profesor de Tecnología', name:'', email:''},
+  {id:'c3', role:'Profesor guía', name:'', email:''}
+];
+let contactsState = load(LS.contacts, CONTACTS_DEFAULT);
+function renderContacts(){
+  const grid = document.getElementById('contactsGrid');
+  grid.innerHTML = '';
+  contactsState.forEach(c=>{
+    const div = document.createElement('div');
+    div.className = 'card contact-card';
+    div.innerHTML = `
+      <h4>${c.role}</h4>
+      <label>Nombre</label>
+      <input type="text" data-field="name" placeholder="Nombre completo" value="${c.name}">
+      <label>Email / contacto</label>
+      <input type="text" data-field="email" placeholder="correo@colegio.cl" value="${c.email}">
+    `;
+    div.querySelectorAll('input').forEach(inp=>{
+      inp.addEventListener('input', ()=>{
+        c[inp.dataset.field] = inp.value;
+        save(LS.contacts, contactsState);
+      });
+    });
+    grid.appendChild(div);
+  });
+  const backupDiv = document.createElement('div');
+  backupDiv.className = 'card contact-card';
+  backupDiv.innerHTML = `
+    <h4>Departamento de Ciencias</h4>
+    <p style="margin-top:8px;">
+      <span class="badge status-listo">✓ Respaldo confirmado</span>
+    </p>
+  `;
+  grid.appendChild(backupDiv);
+}
+renderContacts();
+
+/* ---------- PRESUPUESTO ---------- */
+const BUDGET_DEFAULT = [
+  {item:'Sensor PMS5003', est:10000},
+  {item:'Arduino UNO', est:7000},
+  {item:'Cables jumper', est:1500},
+  {item:'Ventilador de caja', est:12000},
+  {item:'Filtro MERV-13', est:20000},
+  {item:'Filtro HEPA', est:35000},
+  {item:'Carbón activado', est:8000},
+  {item:'Telas (algodón, franela, lana, no tejida)', est:10000},
+  {item:'Incienso', est:1500},
+  {item:'Cinta / duct tape', est:3000},
+  {item:'Cartón', est:1000},
+  {item:'Materiales poster digital', est:0}
+];
+let budget = load(LS.budget, null);
+if(!budget){
+  budget = BUDGET_DEFAULT.map(b=>({id:uid(), item:b.item, est:b.est, real:'', pagador:'Mateo', estado:'Pendiente'}));
+  save(LS.budget, budget);
+}
+function renderBudget(){
+  const body = document.getElementById('budgetBody');
+  body.innerHTML = '';
+  let totalEst = 0, totalReal = 0;
+  const porPagador = {Mateo:0, Skalweit:0, Colegio:0};
+
+  budget.forEach(b=>{
+    totalEst += Number(b.est)||0;
+    const realNum = Number(b.real)||0;
+    if(b.real!=='' && b.real!=null) { totalReal += realNum; porPagador[b.pagador] = (porPagador[b.pagador]||0) + realNum; }
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${b.item}</strong></td><td>${clp(b.est)}</td><td></td><td></td><td></td><td></td>`;
+
+    const realCell = tr.children[2];
+    const realInput = document.createElement('input');
+    realInput.type = 'number';
+    realInput.className = 'real-price-input';
+    realInput.placeholder = '—';
+    realInput.value = b.real;
+    realInput.addEventListener('input', ()=>{
+      b.real = realInput.value;
+      save(LS.budget, budget);
+      renderBudget();
+    });
+    realCell.appendChild(realInput);
+
+    const pagCell = tr.children[3];
+    const pagSelect = document.createElement('select');
+    pagSelect.className = 'pagador-select';
+    ['Mateo','Skalweit','Colegio'].forEach(opt=>{
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt;
+      if(opt===b.pagador) o.selected = true;
+      pagSelect.appendChild(o);
+    });
+    pagSelect.addEventListener('change', ()=>{
+      b.pagador = pagSelect.value;
+      save(LS.budget, budget);
+      renderBudget();
+    });
+    pagCell.appendChild(pagSelect);
+
+    const estCell = tr.children[4];
+    const estSelect = document.createElement('select');
+    estSelect.className = 'estado-select';
+    ['Pendiente','Comprado'].forEach(opt=>{
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt;
+      if(opt===b.estado) o.selected = true;
+      estSelect.appendChild(o);
+    });
+    estSelect.addEventListener('change', ()=>{
+      b.estado = estSelect.value;
+      save(LS.budget, budget);
+      renderBudget();
+    });
+    estCell.appendChild(estSelect);
+
+    const delCell = tr.children[5];
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.innerHTML = '✕';
+    delBtn.addEventListener('click', ()=>{
+      budget = budget.filter(x=>x.id!==b.id);
+      save(LS.budget, budget);
+      renderBudget();
+    });
+    delCell.appendChild(delBtn);
+
+    body.appendChild(tr);
+  });
+
+  const summary = document.getElementById('budgetSummary');
+  summary.innerHTML = `
+    <div class="sbox"><div class="n">${clp(totalEst)}</div><div class="l">Total estimado</div></div>
+    <div class="sbox"><div class="n">${clp(totalReal)}</div><div class="l">Total real gastado</div></div>
+    <div class="sbox"><div class="n">${clp(porPagador.Mateo)}</div><div class="l">Pagado por Mateo</div></div>
+    <div class="sbox"><div class="n">${clp(porPagador.Skalweit)}</div><div class="l">Pagado por Skalweit</div></div>
+    <div class="sbox"><div class="n">${clp(porPagador.Colegio)}</div><div class="l">Pagado por el colegio</div></div>
+  `;
+}
+document.getElementById('addBudgetBtn').addEventListener('click', ()=>{
+  const itemEl = document.getElementById('newBudgetItem');
+  const estEl = document.getElementById('newBudgetEst');
+  const item = itemEl.value.trim();
+  if(!item) return;
+  const est = Number(estEl.value)||0;
+  budget.push({id:uid(), item, est, real:'', pagador:'Mateo', estado:'Pendiente'});
+  save(LS.budget, budget);
+  itemEl.value=''; estEl.value='';
+  renderBudget();
+});
+renderBudget();
+
+/* ---------- INIT ---------- */
+renderTasks();
+updateProgress();
+
+})();
+</script>
+</body>
+</html>
