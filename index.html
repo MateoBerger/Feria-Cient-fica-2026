@@ -61,10 +61,10 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   position:relative;
   max-width:1180px;
   margin:0 auto;
-  padding:12px 20px;
+  padding:10px 16px;
   display:flex;
   align-items:center;
-  gap:16px;
+  gap:10px;
   flex-wrap:nowrap;
   justify-content:space-between;
 }
@@ -72,14 +72,15 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
   color:#fff;
   font-family:'DM Sans',sans-serif;
   font-weight:700;
-  font-size:0.98rem;
+  font-size:0.85rem;
   white-space:nowrap;
   flex-shrink:0;
 }
 .nav-links{
   display:flex;
   align-items:center;
-  gap:2px;
+  justify-content:center;
+  gap:1px;
   flex:1;
   flex-wrap:nowrap;
   min-width:0;
@@ -92,7 +93,7 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
 .nav-group{
   display:flex;
   align-items:center;
-  gap:2px;
+  gap:1px;
   flex-wrap:nowrap;
   flex-shrink:0;
 }
@@ -100,19 +101,19 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
 .nav-sep{
   width:1px;
   align-self:stretch;
-  min-height:18px;
+  min-height:16px;
   background:rgba(255,255,255,0.25);
-  margin:0 8px;
+  margin:0 5px;
   flex-shrink:0;
 }
 .nav-links button{
   background:none;
   border:none;
   color:var(--accent);
-  font-size:0.81rem;
+  font-size:11px;
   font-weight:500;
-  padding:7px 10px;
-  border-radius:7px;
+  padding:5px 6px;
+  border-radius:6px;
   cursor:pointer;
   white-space:nowrap;
   opacity:0.85;
@@ -125,11 +126,11 @@ select:focus, input:focus, textarea:focus{outline:none;border-color:var(--primar
 .navbar-progress{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
   flex-shrink:0;
 }
-.navbar-progress .bar-track{width:80px;height:7px;}
-.navbar-progress span{color:var(--accent);font-size:0.75rem;font-weight:700;white-space:nowrap;}
+.navbar-progress .bar-track{width:56px;height:6px;}
+.navbar-progress span{color:var(--accent);font-size:0.68rem;font-weight:700;white-space:nowrap;}
 .hamburger{
   display:none;
   background:none;
@@ -267,6 +268,20 @@ section .section-sub{color:var(--muted);margin:-10px 0 18px;font-size:0.95rem;}
 .countdown-simple .cd-days{font-family:'DM Sans',sans-serif;font-weight:800;font-size:2.6rem;line-height:1;}
 .countdown-simple .cd-label{font-size:0.82rem;color:var(--muted);max-width:200px;line-height:1.3;}
 
+.resumen-top-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:16px;
+  align-items:start;
+}
+.resumen-side-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+@media (max-width:720px){
+  .resumen-top-grid{grid-template-columns:1fr;}
+}
 .next-step-row{
   display:flex;
   align-items:center;
@@ -829,7 +844,7 @@ footer.page-footer{
     padding:6px 12px 2px;
   }
   .nav-sep{display:none;}
-  .nav-links button{width:100%;text-align:left;padding:10px 12px;}
+  .nav-links button{width:100%;text-align:left;padding:10px 12px;font-size:0.88rem;}
   .navbar-progress{display:none;}
   .hamburger{display:block;}
 }
@@ -852,10 +867,10 @@ footer.page-footer{
       <div class="nav-group">
         <span class="nav-group-label">Ejecución</span>
         <button data-target="materiales">Materiales</button>
-        <button data-target="cronograma">Cronograma</button>
+        <button data-target="cronograma">Crono</button>
         <button data-target="tareas">Tareas</button>
         <button data-target="bitacora">Bitácora</button>
-        <button data-target="presupuesto">Presupuesto</button>
+        <button data-target="presupuesto">Presup.</button>
       </div>
       <span class="nav-sep"></span>
       <div class="nav-group">
@@ -863,7 +878,7 @@ footer.page-footer{
         <button data-target="limitaciones">Límites</button>
         <button data-target="quintero">Caso Quintero</button>
         <button data-target="referencias">Referencias</button>
-        <button data-target="checklist">Checklist</button>
+        <button data-target="checklist">Check</button>
       </div>
     </nav>
     <div class="navbar-progress">
@@ -895,22 +910,24 @@ footer.page-footer{
         </div>
       </div>
 
-      <div class="grid grid-2" style="margin-bottom:16px;">
+      <div class="resumen-top-grid" style="margin-bottom:16px;">
         <div class="card">
           <h3>Objetivo</h3>
           <p>Desarrollar una propuesta científica de purificación de aire de bajo costo que pueda implementarse en salas de clase de zonas de sacrificio en Chile, contribuyendo a mejorar las condiciones de aprendizaje de estudiantes expuestos a contaminación industrial.</p>
           <h3 style="margin-top:16px;">Descripción</h3>
           <p>Construimos varios purificadores de aire tipo <strong>Corsi-Rosenthal</strong> usando distintos materiales filtrantes, medimos la reducción de PM2.5 con un sensor <strong>PMS5003</strong> conectado a <strong>Arduino</strong>, y calculamos cuál material ofrece la mejor relación costo-eficiencia. El proyecto se enmarca en el problema de las <strong>zonas de sacrificio</strong> de Chile, en particular Quintero-Puchuncaví, donde niños han sido intoxicados dentro de sus propias escuelas. Nuestra tesis: si mejoramos el aire en las salas, mejoramos la educación; si mejoramos la educación, mejoramos el futuro de Chile.</p>
         </div>
-        <div class="card">
-          <h3>Progreso global de tareas</h3>
-          <div class="bar-track" style="height:14px;margin-bottom:6px;"><div class="bar-fill" id="mainProgressBar" style="height:14px;"></div></div>
-          <p id="mainProgressText" style="color:var(--muted);font-size:0.88rem;">Cargando...</p>
-          <p style="font-size:0.85rem;color:var(--muted);">Se calcula automáticamente según las tareas marcadas como completadas en la sección <strong>Tareas</strong>.</p>
-        </div>
-        <div class="card">
-          <h3>Próximos pasos</h3>
-          <div id="nextStepsList"></div>
+        <div class="resumen-side-col">
+          <div class="card">
+            <h3>Progreso global de tareas</h3>
+            <div class="bar-track" style="height:14px;margin-bottom:6px;"><div class="bar-fill" id="mainProgressBar" style="height:14px;"></div></div>
+            <p id="mainProgressText" style="color:var(--muted);font-size:0.88rem;">Cargando...</p>
+            <p style="font-size:0.85rem;color:var(--muted);">Se calcula automáticamente según las tareas marcadas como completadas en la sección <strong>Tareas</strong>.</p>
+          </div>
+          <div class="card">
+            <h3>Próximos pasos</h3>
+            <div id="nextStepsList"></div>
+          </div>
         </div>
       </div>
 
